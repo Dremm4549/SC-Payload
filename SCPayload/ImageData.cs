@@ -5,19 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SCPayload
-{
+{   
     internal class ImageData
     {
-       
-
+        
         public void downloadImage()
         {
-
+            //reading the image from a text file and saving it to the image buffer
         }
 
         public void getImage()
         {
-            //rerturns image buffer
+          //return image buffer
         }
     }
 }
