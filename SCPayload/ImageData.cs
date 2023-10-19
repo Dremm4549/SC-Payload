@@ -25,5 +25,10 @@ namespace SCPayload
           //return image buffer
           return data;
         }
+
+        public float getlat() 
+        { 
+            return tel.Lat;
+        }
     }
 }
