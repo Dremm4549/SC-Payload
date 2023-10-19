@@ -5,25 +5,47 @@
 //recive
 //packatize data of image data and telemetry data
 namespace SCPayload
-{ 
-	private class Packet
+{         
+	/// <summary>
+    /// Packet class will handle data based on defined protocol
+    /// </summary>
+    public class Packet
 	{
-		public Packet()
+        public Packet()
 		{
-			public byte[][] Packets = { get; private set; }
+            /// <summary>
+            /// Collection of packets that are created after packetization
+            /// </summary>
+            public byte[][] Packets = { get; private set; }
 			private byte packetData;
+
+			/// <summary>
+			/// Size of packet
+			/// </summary>
 			private const int packetSize = 100;
 
 			private const int seqNumFlagSize = sizeof(int);
 			private const int endFlagSize = sizeof(bool);
 			
-			//Inintialize packetData
+			/// <summary>
+			/// Defaut constructor
+			/// </summary>
+			public Packet()
+			{ 
+			}
+			
+			/// <summary>
+			/// Inits a new instance of Packet with provided data
+			/// </summary>
+			/// <param name="input">Data to be used for packetization</param>
 			public Packet(byte[] input)
 			{
 				packetData = input;
 			}
 
-			//Packetize the data
+			/// <summary>
+			/// Packetize the data
+			/// </summary>
 			public void Packetize()
 			{
 				int realPacketSize = packetSize - seqNumSize - endFlagSize;
@@ -48,14 +70,18 @@ namespace SCPayload
 				}
 			}	
 			
-			//Send stub
+			/// <summary>
+			/// Send data (Stub)
+			/// </summary>
 			public void Send()
 			{
 				//Temp send
 				Console.WriteLine("Sending the data");
 			}
 				
-			//Recieve stub
+			/// <summary>
+			/// Recieve data (stub)
+			/// </summary>
 			public void Recieve()
 			{
 				//Temp return
