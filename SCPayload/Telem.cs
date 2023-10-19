@@ -8,9 +8,9 @@ namespace SCPayload
 {
     internal class Telem
     {
-        private float Long{ get; set; }
-        private float Lat { get; set; }
-        private float Temp { get; set; }
+        public float Long{ get; private set; }
+        public float Lat { get; private set; }
+        public float Temp { get; private set; }
 
 
     }
