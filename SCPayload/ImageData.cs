@@ -19,7 +19,7 @@ namespace SCPayload
         /// the telemetry object to hold all telemetry data
         /// </summary>
         Telem tel;
-        ImageData()
+        public ImageData()
         {
             data = null!;
         }
