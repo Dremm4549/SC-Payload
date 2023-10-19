@@ -8,15 +8,20 @@ namespace SCPayload
 {   
     internal class ImageData
     {
-        
+        byte[] data;//stores the image
+        ImageData()
+        {
+            data = null!;
+        }
         public void downloadImage()
         {
             //reading the image from a text file and saving it to the image buffer
         }
 
-        public void getImage()
+        public byte[] getImage()
         {
           //return image buffer
+          return data;
         }
     }
 }
