@@ -5,13 +5,20 @@ using SCPayload;
 using System;
 public class Program
 {
+    /// <summary>
+    /// Acts as a simple test harness to test components within payload object.
+    /// </summary>
     static public void Main()
     {
         Telem telm = new Telem();
 
-        Console.WriteLine(telm.Temp.ToString());
+        ImageData imageData = new ImageData();
+
+        Payload obj = new Payload();
+
+        
         telm.SetTelemetry(3,4,5);
-        Console.WriteLine("hello");
+
         Console.ReadKey();
     }
 }
