@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <>
+#include <json.hpp>
 
 /// <summary>
 /// Packet class will handle data based on defined protocol
@@ -14,8 +14,10 @@ private:
 	static const int packetSize = 66560;
 	static const int seqNumFlagSize = sizeof(int);
 	static const int endFlagSize = sizeof(int);
+	std::string destinationID;
+	std::string sourceID;
 public:
-	std::vector<std::vector<unsigned char>> Packets;
+	std::vector<nlohmann::json> Packets;
 	/// <summary>
 	/// Default constructor for packet
 	/// </summary>
@@ -24,7 +26,8 @@ public:
 	/// Creates new instance of packet with data
 	/// </summary>
 	/// <param name="inputData">Data to be used for packetization</param>
-	Packet(const std::vector<unsigned char>& inputData) : packetData(inputData) {}
+	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID) 
+		: packetData(inputData), destinationID(destID), sourceID(srcID) {}
 	/// <summary>
 	/// Packetize the data
 	/// </summary>
@@ -40,13 +43,14 @@ public:
 		{
 			int start = i * realPacketSize;
 			int end = std::min(start + realPacketSize, static_cast<int>(packetData.size()));
-			std::vector<unsigned char> thisPacket(seqNumFlagSize + endFlagSize + (end - start));
-			int seqNum = i;
-			bool endFlag = (i == totalPackets - 1);
-			memcpy(thisPacket.data(), &seqNum, seqNumFlagSize);
-			memcpy(thisPacket.data() + seqNumFlagSize, &endFlag, endFlagSize);
-			std::copy(packetData.begin() + start, packetData.begin() + end, thisPacket.begin() + seqNumFlagSize + endFlagSize);
-			Packets.push_back(thisPacket);
+			nlohmann::json packetJSON;
+			packetJSON["numPacketsExpected"] = totalPackets;
+			packetJSON["data"]["Sequence Number"] = i;
+			packetJSON["data"]["message"] = std::vector<unsigned char>(packetData.begin() + start, packetData.begin() + end);
+			packetJSON["destination"] = destinationID;
+			packetJSON["source"] = sourceID;
+			packetJSON["data"]["isLastPacket"] = (i == totalPackets - 1);
+			Packets.push_back(packetJSON);
 		}
 	}
 	/// <summary>
