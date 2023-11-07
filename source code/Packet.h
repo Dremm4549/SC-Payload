@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <cstring>
+#include <>
 
 /// <summary>
 /// Packet class will handle data based on defined protocol
@@ -9,7 +11,7 @@ class Packet
 {
 private:
 	std::vector<unsigned char> packetData;
-	static const int packetSize = 100;
+	static const int packetSize = 66560;
 	static const int seqNumFlagSize = sizeof(int);
 	static const int endFlagSize = sizeof(int);
 public:
@@ -33,6 +35,19 @@ public:
 
 		Packets.clear();
 		Packets.resize(totalPackets);
+
+		for (int i = 0; i < totalPackets; i++)
+		{
+			int start = i * realPacketSize;
+			int end = std::min(start + realPacketSize, static_cast<int>(packetData.size()));
+			std::vector<unsigned char> thisPacket(seqNumFlagSize + endFlagSize + (end - start));
+			int seqNum = i;
+			bool endFlag = (i == totalPackets - 1);
+			memcpy(thisPacket.data(), &seqNum, seqNumFlagSize);
+			memcpy(thisPacket.data() + seqNumFlagSize, &endFlag, endFlagSize);
+			std::copy(packetData.begin() + start, packetData.begin() + end, thisPacket.begin() + seqNumFlagSize + endFlagSize);
+			Packets.push_back(thisPacket);
+		}
 	}
 	/// <summary>
 	/// Send data (Stub)
