@@ -6,6 +6,9 @@
 
 int main()
 {
+	return 0;
+}
+{
 	crow::SimpleApp app;
 	Payload payloadObj; //create payload object
 
