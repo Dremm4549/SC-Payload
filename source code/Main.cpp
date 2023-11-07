@@ -41,6 +41,7 @@ int main()
 		if(state){
 			if(strcmp(state, "true") == 0){
 				payloadObj.SetPowerState(true);
+				jsonResp["Verb"] = "PUT";
 				jsonResp["Source"] = "ourId";
 				jsonResp["destination"] = "theirId";
 				jsonResp["numPacketsExpected"] = 1;
@@ -50,6 +51,7 @@ int main()
 			else if(strcmp(state, "false") == 0){
 				payloadObj.SetPowerState(false);
 				res.code = 200;
+				jsonResp["Verb"] = "PUT";
 				jsonResp["Source"] = "ourId";
 				jsonResp["destination"] = "theirId";
 				jsonResp["numPacketsExpected"] = 1;
