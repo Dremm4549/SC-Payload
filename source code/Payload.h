@@ -29,6 +29,5 @@ public:
 	/// Set power state
 	/// </summary>
 	/// <param name="state">Powerstate as a bool</param>
-
 	void SetPowerState(bool state);
 };

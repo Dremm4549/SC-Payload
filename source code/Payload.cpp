@@ -10,7 +10,7 @@ Payload::Payload()
 Payload::Payload(bool state)
 {
 	
-	if(state == true || state == false)
+	if(state == 0 || state == 1)
 	{
 		powerState = state;
 	}
@@ -27,7 +27,7 @@ bool Payload::GetPowerState()
 
 void Payload::SetPowerState(bool state)
 {
-	if (state == true || state == false)
+	if (state == 1 || state == 0)
 	{
 		powerState = state;
 	}
