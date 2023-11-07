@@ -2,12 +2,14 @@
 
 #include "crow_all.h"
 #include "Payload.h"
+#include "imageData.h"
 #include <iostream>
 
 int main()
 {
 	crow::SimpleApp app;
 	Payload payloadObj; //create payload object
+	ImageData imageDataObj; //create image data object
 
 	//All routes in this main are subject to modification. This just provides a baseline to use so that 1. We have an idea of what routes we need to handle and 2. Other services will be able to communicate with our service.
 	//Current routes are not necessarily final either. The syntax for the routes may need to be changed, some routes can be added/removed, logic obviously still needs to be added for the routes as well.
@@ -28,16 +30,6 @@ int main()
     ([&payloadObj](const crow::request& req, crow::response& res) {
 		const char* state = req.url_params.get("state");
 		crow::json::wvalue jsonResp;
-
-// {
-//     "Source:": "OurID",
-//     "destination": "destID",
-//     "totalPackets": "numOfExpectedPackets",
-//     "data": {
-//         "sequenece number": "value",
-//         "raw": "hexString"
-//     }
-// }
 		if(state){
 			if(strcmp(state, "true") == 0){
 				payloadObj.SetPowerState(true);
@@ -71,9 +63,19 @@ int main()
 		});
 
 	CROW_ROUTE(app, "/DownloadImage")
-	([](const crow::request& req, crow::response& res) {
+			.methods("GET"_method)
+	([&imageDataObj](const crow::request& req, crow::response& res) {
+		const char* state = req.url_params.get("state");
+		crow::json::wvalue jsonResp;
 
-	});
+		imageDataObj.downloadImage();
+		jsonResp["message"] = "IMAGE READ";
+		res.code = 200;
+
+		res.set_header("Content-Type", "application/json");
+		res.write(jsonResp.dump());
+		res.end();
+	});	
 
 	CROW_ROUTE(app, "/CaptureImage")
 	([](const crow::request& req, crow::response& res) {

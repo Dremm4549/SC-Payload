@@ -1,6 +1,9 @@
 #pragma once
 #include <vector>
 #include "Telem.h"
+#include <fstream>
+#include <iostream>
+#include <string>
 /// <summary>
 /// This class is expected to handle all image data functions
 /// </summary>
@@ -9,6 +12,8 @@ class ImageData
 private:
 	std::vector<unsigned char> data;
 	Telem t;
+	int fileSize;
+	int totalBytesRead;
 
 public:
 	/// <summary>
@@ -16,6 +21,8 @@ public:
 	/// </summary>
 	ImageData()
 	{
+		fileSize = 0;
+		totalBytesRead = 0;
 		data.clear();
 	}
 	/// <summary>
@@ -23,6 +30,27 @@ public:
 	/// </summary>
 	void downloadImage()
 	{
+		std::string filePath = "../../SpaceImages";
+
+		std::ifstream file(filePath, std::ios::binary);
+
+		if(!file.is_open()){
+			std::cerr << "FAILED TO OPEN FILE" << std::endl;
+			return;
+		}
+
+		file.seekg(0,std::ios::end);
+		std::streampos fileSize = file.tellg();
+		if(fileSize > 0){
+			std::cout << std::endl << fileSize << std::endl;
+		}
+
+		char* imageBuffer = new char[fileSize];
+
+		file.seekg(0,std::ios::beg);
+		file.read(imageBuffer, fileSize);
+
+		delete[] imageBuffer;
 
 	}
 	/// <summary>
