@@ -224,8 +224,8 @@ namespace crow
 
 #pragma once
 
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/functional/hash.hpp>
+//#include <boost/algorithm/string/predicate.hpp>
+//#include <boost/functional/hash.hpp>
 #include <unordered_map>
 
 namespace crow
@@ -12070,7 +12070,7 @@ namespace crow
         std::vector<std::atomic<unsigned int>> task_queue_length_pool_;
 
         std::chrono::milliseconds tick_interval_;
-        std::function<void()> tick_function_;
+        //std::function<void()> tick_function_;
 
         std::tuple<Middlewares...>* middlewares_;
 

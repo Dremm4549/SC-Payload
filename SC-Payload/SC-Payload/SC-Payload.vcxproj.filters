@@ -35,6 +35,7 @@
     <ClCompile Include="..\..\source code\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+
     <ClCompile Include="..\..\source code\Packet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -43,5 +44,10 @@
     <Text Include="..\..\source code\IP.txt">
       <Filter>Resource Files</Filter>
     </Text>
+
+    <ClCompile Include="..\..\source code\Payload.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+
   </ItemGroup>
 </Project>
