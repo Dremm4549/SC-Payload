@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <string>
+using namespace std;
+
 #include <cstring>
 #include <json.hpp>
 
@@ -14,8 +17,11 @@ private:
 	static const int packetSize = 66560;
 	static const int seqNumFlagSize = sizeof(int);
 	static const int endFlagSize = sizeof(int);
+
+	string IP[7];
 	std::string destinationID;
 	std::string sourceID;
+
 public:
 	std::vector<nlohmann::json> Packets;
 	/// <summary>
@@ -67,4 +73,9 @@ public:
 	{
 		std::cout << "Receiving the data" << std::endl;
 	}
+	string getIP(int servicenum)
+	{
+		return IP[servicenum];
+	}
+	void readIP();
 };

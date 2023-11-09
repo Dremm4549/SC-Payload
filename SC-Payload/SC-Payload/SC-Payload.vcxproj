@@ -136,7 +136,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source code\Main.cpp" />
+    <ClCompile Include="..\..\source code\Packet.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\source code\IP.txt" />
+
     <ClCompile Include="..\..\source code\Payload.cpp" />
+
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
