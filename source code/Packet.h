@@ -1,7 +1,8 @@
 #pragma once
 #include <iostream>
 #include <vector>
-
+#include <string>
+using namespace std;
 /// <summary>
 /// Packet class will handle data based on defined protocol
 /// </summary>
@@ -12,6 +13,7 @@ private:
 	static const int packetSize = 100;
 	static const int seqNumFlagSize = sizeof(int);
 	static const int endFlagSize = sizeof(int);
+	string IP[7];
 public:
 	std::vector<std::vector<unsigned char>> Packets;
 	/// <summary>
@@ -48,4 +50,9 @@ public:
 	{
 		std::cout << "Receiving the data" << std::endl;
 	}
+	string getIP(int servicenum)
+	{
+		return IP[servicenum];
+	}
+	void readIP();
 };
