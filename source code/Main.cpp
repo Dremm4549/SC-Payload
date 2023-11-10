@@ -76,11 +76,6 @@ int main()
         res.end();
 	});
 
-	/// <summary>
-	/// This route will be responsible for setting the telemetry 
-	///within image meta data
-	/// </summary>
-
 
 	/// <summary>
 	/// SetTelemetry route will change the current telememtry values in the 
@@ -106,7 +101,7 @@ int main()
 	/// <summary>
 	/// SetTelemetry route will change the current telememtry values in the 
 	/// Telemtry object
-	/// </summary>
+	/// </summary>	
 	CROW_ROUTE(app, "/SetTelemetry")
 	.methods("PUT"_method)
 	([&telemetryObj](const crow::request& req, crow::response& res) {
@@ -123,7 +118,7 @@ int main()
 				double temp = readVal["Temp"].d();
 
 				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
-				
+
 				jsonResp["Data"]["Long"] = telemetryObj.getLong();
 				jsonResp["Data"]["lat"] = telemetryObj.getLat();
 				jsonResp["Data"]["temp"] = telemetryObj.getTemp();--
