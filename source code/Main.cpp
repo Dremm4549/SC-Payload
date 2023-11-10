@@ -121,7 +121,7 @@ int main()
 
 				jsonResp["Data"]["Long"] = telemetryObj.getLong();
 				jsonResp["Data"]["lat"] = telemetryObj.getLat();
-				jsonResp["Data"]["temp"] = telemetryObj.getTemp();--
+				jsonResp["Data"]["temp"] = telemetryObj.getTemp();
 			}
 		}
 		
