@@ -3,10 +3,12 @@
 #include "crow_all.h"
 #include "Payload.h"
 #include "imageData.h"
+#include "Packet.h"
 #include <iostream>
 
 int main()
 {
+
 	crow::SimpleApp app;
 	Payload payloadObj; //create payload object
 	ImageData imageDataObj; //create image data object

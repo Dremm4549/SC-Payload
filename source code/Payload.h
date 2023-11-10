@@ -13,30 +13,21 @@ public:
 	/// <summary>
 	/// Default constructor for the payload object
 	/// </summary>
-	Payload()
-	{
-        powerState = false;
-	}
+	Payload();
 	/// <summary>
 	/// Constructor to set power state
 	/// </summary>
 	/// <param name="state">Powerstate as a bool</param>
-	Payload(bool state) : powerState(state) {};
+	Payload(bool state);
 	/// <summary>
 	/// Get the current powerState
 	/// </summary>
 	/// <returns>power state as a bool</returns>
-	bool GetPowerState()
-	{
-		return powerState;
-	}
+	bool GetPowerState();
 
 	/// <summary>
 	/// Set power state
 	/// </summary>
 	/// <param name="state">Powerstate as a bool</param>
-
-	void SetPowerState(bool state)	{
-        powerState = state;
-	}
+	void SetPowerState(bool state);
 };
