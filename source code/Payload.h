@@ -1,8 +1,11 @@
 #pragma once
 
-/// <summary>
-/// this class will handle the power state
-/// </summary>
+/**
+ * @brief Class to handle the power state of a payload.
+ *
+ * This class provides functionality to manage and query the power state of a payload.
+ * It allows setting and getting the power state represented as a boolean value.
+ */
 class Payload
 {
 private:
@@ -10,24 +13,29 @@ private:
 
 
 public:
-	/// <summary>
-	/// Default constructor for the payload object
-	/// </summary>
+	/**
+	 * @brief Default constructor for the Payload class.
+	 *
+	 * Initializes the power state to false (off).
+	 */
 	Payload();
-	/// <summary>
-	/// Constructor to set power state
-	/// </summary>
-	/// <param name="state">Powerstate as a bool</param>
+	/**
+	 * @brief Construct a new Payload object with a specified power state.
+	 *
+	 * @param state Initial power state to set (true for on, false for off).
+	 */
 	Payload(bool state);
-	/// <summary>
-	/// Get the current powerState
-	/// </summary>
-	/// <returns>power state as a bool</returns>
+	/**
+	 * @brief Get the current power state of the payload.
+	 *
+	 * @return bool Current power state (true for on, false for off).
+	 */
 	bool GetPowerState();
-
-	/// <summary>
-	/// Set power state
-	/// </summary>
-	/// <param name="state">Powerstate as a bool</param>
+	/**
+	 * @brief Set the power state of the payload.
+	 *
+	 * @param state Power state to set (true for on, false for off).
+	 *              An invalid state prints an error message.
+	 */
 	void SetPowerState(bool state);
 };

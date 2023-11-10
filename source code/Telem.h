@@ -1,62 +1,73 @@
 #pragma once
 
-/// <summary>
-/// this class handles and changes or requests for data of the telemarty
-/// </summary>
+/**
+ * @brief Class for handling and managing telemetry data.
+ *
+ * This class is responsible for storing and providing access to telemetry data,
+ * including longitude, latitude, and temperature. It offers methods to set and get
+ * these values individually or collectively.
+ */
 class Telem
 {
 private:
-	float Long;
-	float Lat;
-	float Temp;
+	float Long; ///< Longitude value.
+	float Lat; ///< Latitude value.
+	float Temp; ///< Temperature value.
 
 public:
-	/// <summary>
-	/// Default constructor for the telem object
-	/// </summary>
+	/**
+	 * @brief Default constructor for the Telem class.
+	 *
+	 * Initializes longitude, latitude, and temperature to zero.
+	 */
 	Telem()
 	{
 		Long = 0;
 		Lat = 0;
 		Temp = 0;
 	}
-	/// <summary>
-	/// Constructor to set Telem object to values
-	/// </summary>
-	/// <param name="Long">Longitude as a float</param>
-	/// <param name="Lat">Latitude as a float</param>
-	/// <param name="Temp">Temperature as a float</param>
+	/**
+	 * @brief Construct a new Telem object with specified values.
+	 *
+	 * @param Long Longitude value as a float.
+	 * @param Lat Latitude value as a float.
+	 * @param Temp Temperature value as a float.
+	 */
 	Telem(float Long, float Lat, float Temp) : Long(Long), Lat(Lat), Temp(Temp) {};
-	/// <summary>
-	/// Get longitude value
-	/// </summary>
-	/// <returns>Longitude as a float</returns>
+	/**
+	 * @brief Get the longitude value.
+	 *
+	 * @return float Current longitude value.
+	 */
 	float getLong()
 	{
 		return Long;
 	}
-	/// <summary>
-	/// Get latitude value
-	/// </summary>
-	/// <returns>Latitude value as a float</returns>
+	/**
+	 * @brief Get the latitude value.
+	 *
+	 * @return float Current latitude value.
+	 */
 	float getLat()
 	{
 		return Lat;
 	}
-	/// <summary>
-	/// Get temperature value
-	/// </summary>
-	/// <returns>Temperature value as a float</returns>
+	/**
+	 * @brief Get the temperature value.
+	 *
+	 * @return float Current temperature value.
+	 */
 	float getTemp()
 	{
 		return Temp;
 	}
-	/// <summary>
-	/// Set all telemetry values
-	/// </summary>
-	/// <param name="Lo">Longitude as a float</param>
-	/// <param name="La">Latitude as a float</param>
-	/// <param name="T">Temperature as a float</param>
+	/**
+	 * @brief Set all telemetry values at once.
+	 *
+	 * @param Lo Longitude value as a float.
+	 * @param La Latitude value as a float.
+	 * @param T Temperature value as a float.
+	 */
 	void setTelem(float Lo, float La, float T)
 	{
 		Long = Lo;
