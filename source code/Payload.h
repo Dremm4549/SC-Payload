@@ -1,7 +1,7 @@
 #pragma once
 
 /// <summary>
-/// this class will handle the power state and be responsible for holding the image data
+/// this class will handle the power state
 /// </summary>
 class Payload
 {
