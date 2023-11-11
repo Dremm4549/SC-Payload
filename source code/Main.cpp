@@ -4,7 +4,7 @@
 #include "Payload.h"
 #include "Telem.h"
 #include "imageData.h"
-#include "Packet.h"
+//#include "Packet.h"
 #include <iostream>
 
 int main()
@@ -128,7 +128,7 @@ int main()
 				
 				jsonResp["Data"]["Long"] = telemetryObj.getLong();
 				jsonResp["Data"]["lat"] = telemetryObj.getLat();
-				jsonResp["Data"]["temp"] = telemetryObj.getTemp();--
+				jsonResp["Data"]["temp"] = telemetryObj.getTemp();
 			}
 		}
 		

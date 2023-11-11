@@ -9,5 +9,5 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 find_package(Threads)
 
 include_directories(${Boost_INCLUDE_DIRS})
-add_executable(ScPayload main.cpp)
+add_executable(ScPayload main.cpp payload.cpp)
 target_link_libraries(ScPayload ${Boost_LIBRARIES} Threads::Threads)
