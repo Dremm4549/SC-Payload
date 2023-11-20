@@ -30,7 +30,7 @@ public:
 	/**
 	 * @brief Default constructor for the Packet class.
 	 */
-	Packet() {}
+	Packet();
 	/**
 	 * @brief Construct a new Packet object with initial data.
 	 *
@@ -38,8 +38,7 @@ public:
 	 * @param destID The destination ID for the packet.
 	 * @param srcID The source ID for the packet.
 	 */
-	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID) 
-		: packetData(inputData), destinationID(destID), sourceID(srcID) {}
+	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID);
 	/**
 	 * @brief Packetizes the data into JSON objects.
 	 *
@@ -47,52 +46,22 @@ public:
 	 * The function calculates the number of packets required and fills each packet with
 	 * the appropriate data segment.
 	 */
-	void Packetize()
-	{
-		int realPacketSize = packetSize - seqNumFlagSize - endFlagSize;
-		int totalPackets = (packetData.size() + realPacketSize - 1) / realPacketSize;
-
-		Packets.clear();
-		Packets.resize(totalPackets);
-
-		for (int i = 0; i < totalPackets; i++)
-		{
-			int start = i * realPacketSize;
-			int end = std::min(start + realPacketSize, static_cast<int>(packetData.size()));
-			nlohmann::json packetJSON;
-			packetJSON["numPacketsExpected"] = totalPackets;
-			packetJSON["data"]["Sequence Number"] = i;
-			packetJSON["data"]["message"] = std::vector<unsigned char>(packetData.begin() + start, packetData.begin() + end);
-			packetJSON["destination"] = destinationID;
-			packetJSON["source"] = sourceID;
-			packetJSON["data"]["isLastPacket"] = (i == totalPackets - 1);
-			Packets.push_back(packetJSON);
-		}
-	}
+	void Packetize();
 	/**
 	 * @brief Sends data packets (stub function for demonstration).
 	 */
-	void Send()
-	{
-		std::cout << "Sending data" << std::endl;
-	}
+	void Send();
 	/**
 	 * @brief Receives data packets (stub function for demonstration).
 	 */
-	void Recieve()
-	{
-		std::cout << "Receiving the data" << std::endl;
-	}
+	void Recieve();
 	/**
 	 * @brief Gets the IP address for a given service number.
 	 *
 	 * @param servicenum The service number for which to retrieve the IP address.
 	 * @return string The IP address corresponding to the service number.
 	 */
-	string getIP(int servicenum)
-	{
-		return IP[servicenum];
-	}
+	string getIP(int servicenum);
 	/**
 	 * @brief Reads and initializes the IP addresses (to be implemented).
 	 */
