@@ -20,12 +20,7 @@ public:
 	 *
 	 * Initializes longitude, latitude, and temperature to zero.
 	 */
-	Telem()
-	{
-		Long = 0;
-		Lat = 0;
-		Temp = 0;
-	}
+	Telem();
 	/**
 	 * @brief Construct a new Telem object with specified values.
 	 *
@@ -33,34 +28,25 @@ public:
 	 * @param Lat Latitude value as a float.
 	 * @param Temp Temperature value as a float.
 	 */
-	Telem(float Long, float Lat, float Temp) : Long(Long), Lat(Lat), Temp(Temp) {};
+	Telem(float Long, float Lat, float Temp);
 	/**
 	 * @brief Get the longitude value.
 	 *
 	 * @return float Current longitude value.
 	 */
-	float getLong()
-	{
-		return Long;
-	}
+	float getLong();
 	/**
 	 * @brief Get the latitude value.
 	 *
 	 * @return float Current latitude value.
 	 */
-	float getLat()
-	{
-		return Lat;
-	}
+	float getLat();
 	/**
 	 * @brief Get the temperature value.
 	 *
 	 * @return float Current temperature value.
 	 */
-	float getTemp()
-	{
-		return Temp;
-	}
+	float getTemp();
 	/**
 	 * @brief Set all telemetry values at once.
 	 *
@@ -68,10 +54,5 @@ public:
 	 * @param La Latitude value as a float.
 	 * @param T Temperature value as a float.
 	 */
-	void setTelem(float Lo, float La, float T)
-	{
-		Long = Lo;
-		Lat = La;
-		Temp = T;
-	}
+	void setTelem(float Lo, float La, float T);
 };
