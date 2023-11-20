@@ -38,8 +38,7 @@ public:
 	 * @param destID The destination ID for the packet.
 	 * @param srcID The source ID for the packet.
 	 */
-	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID)
-		: packetData(inputData), destinationID(destID), sourceID(srcID);
+	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID);
 	/**
 	 * @brief Packetizes the data into JSON objects.
 	 *
