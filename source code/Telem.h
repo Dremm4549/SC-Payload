@@ -64,8 +64,22 @@ public:
 	 * @param T Time value as a time_t.
 	 */
 	void setTelem(float Lo, float La, std::time_t T);
-
+	/**
+	 * @brief Set Long value.
+	 *
+	 * @param Lo Longitude value as a float.
+	 */
 	void setLong(float Lo);
+		/**
+	 * @brief Set Lat value.
+	 *
+	 * @param La Latitude value as a float.
+	 */
 	void setLat(float La);
+		/**
+	 * @brief Set time value.
+	 *
+	 * @param T Time value as a time_t.
+	 */
 	void setTime(std::time_t T);
 };
