@@ -3,8 +3,8 @@
 #include "crow_all.h"
 #include "Payload.h"
 #include "Telem.h"
-#include "imageData.h"
-//#include "Packet.h"
+#include "ImageData.h"
+#include "Packet.h"
 #include <iostream>
 
 int main()
@@ -97,7 +97,7 @@ int main()
 			jsonResp["Status"] = "OK";
 			jsonResp["data"]["Long"] = telemetryObj.getLong();
 			jsonResp["data"]["lat"] = telemetryObj.getLat();
-			jsonResp["data"]["temp"] = telemetryObj.getTemp();
+			jsonResp["data"]["temp"] = telemetryObj.getTime();
 
 
 			res.set_header("Content-Type", "application/json");
@@ -118,17 +118,17 @@ int main()
 		readVal = crow::json::load(req.body);
 
 		if(readVal){
-			if(readVal.has("long") && readVal.has("lat") && readVal.has("Temp")){
+			if(readVal.has("long") && readVal.has("lat") && readVal.has("Time")){
 				res.code = 200;
 				double longV = readVal["long"].d();
 				double lat = readVal["lat"].d();
-				double temp = readVal["Temp"].d();
+				double temp = readVal["Time"].d();
 
 				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
 				
 				jsonResp["Data"]["Long"] = telemetryObj.getLong();
 				jsonResp["Data"]["lat"] = telemetryObj.getLat();
-				jsonResp["Data"]["temp"] = telemetryObj.getTemp();
+				jsonResp["Data"]["time"] = telemetryObj.getTime();
 			}
 		}
 		

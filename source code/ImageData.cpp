@@ -5,7 +5,7 @@ ImageData::ImageData()
 	totalBytesRead = 0;
 	data.clear();
 }
-void ImageData :: downloadImage()
+void ImageData::downloadImage()
 {
 	std::string filePath = "../../SpaceImages";
 
@@ -31,7 +31,7 @@ void ImageData :: downloadImage()
 
 }
 
-std::vector<unsigned char> ImageData :: getImage()
+std::vector<unsigned char> ImageData::getImage()
 {
 	return data;
 }

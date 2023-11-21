@@ -1,10 +1,13 @@
 #pragma once
-
+#include <iostream>
+#include <ctime>
+#include <iomanip>
+#include <chrono>
 /**
  * @brief Class for handling and managing telemetry data.
  *
  * This class is responsible for storing and providing access to telemetry data,
- * including longitude, latitude, and temperature. It offers methods to set and get
+ * including longitude, latitude, and time. It offers methods to set and get
  * these values individually or collectively.
  */
 class Telem
@@ -12,23 +15,29 @@ class Telem
 private:
 	float Long; ///< Longitude value.
 	float Lat; ///< Latitude value.
-	float Temp; ///< Temperature value.
+	std::time_t time; ///< Time value.
 
 public:
 	/**
 	 * @brief Default constructor for the Telem class.
 	 *
-	 * Initializes longitude, latitude, and temperature to zero.
+	 * Initializes longitude, latitude, and time to zero.
 	 */
 	Telem();
+	/**
+	 * @brief Constructor for the Telem class.
+	 *
+	 * Initializes longitude, latitude to set values and ttime to zero.
+	 */
+	Telem(float Long, float Lat);
 	/**
 	 * @brief Construct a new Telem object with specified values.
 	 *
 	 * @param Long Longitude value as a float.
 	 * @param Lat Latitude value as a float.
-	 * @param Temp Temperature value as a float.
+	 * @param Time Time value as a time_t.
 	 */
-	Telem(float Long, float Lat, float Temp);
+	Telem(float Long, float Lat, std::time_t Time);
 	/**
 	 * @brief Get the longitude value.
 	 *
@@ -42,17 +51,35 @@ public:
 	 */
 	float getLat();
 	/**
-	 * @brief Get the temperature value.
+	 * @brief Get the time value.
 	 *
-	 * @return float Current temperature value.
+	 * @return time_t Current time value.
 	 */
-	float getTemp();
+	std::time_t getTime();
 	/**
 	 * @brief Set all telemetry values at once.
 	 *
 	 * @param Lo Longitude value as a float.
 	 * @param La Latitude value as a float.
-	 * @param T Temperature value as a float.
+	 * @param T Time value as a time_t.
 	 */
-	void setTelem(float Lo, float La, float T);
+	void setTelem(float Lo, float La, std::time_t T);
+	/**
+	 * @brief Set Long value.
+	 *
+	 * @param Lo Longitude value as a float.
+	 */
+	void setLong(float Lo);
+		/**
+	 * @brief Set Lat value.
+	 *
+	 * @param La Latitude value as a float.
+	 */
+	void setLat(float La);
+		/**
+	 * @brief Set time value.
+	 *
+	 * @param T Time value as a time_t.
+	 */
+	void setTime(std::time_t T);
 };
