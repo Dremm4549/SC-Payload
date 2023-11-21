@@ -12,5 +12,8 @@ if(NOT googletest_POPULATED)
 	add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BUILD_DIR})
 endif()
 
+add_library(TelemLibrary "../source code/Telem.cpp")
+
 add_executable(PayloadTests Tests.cpp)
 target_link_libraries(PayloadTests gtest_main gmock_main)
+target_link_libraries(PayloadTests TelemLibrary)

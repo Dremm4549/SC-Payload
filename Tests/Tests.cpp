@@ -1,7 +1,12 @@
 #include <gtest/gtest.h>
+#include "../source code/ImageData.h"
+#include "../source code/Payload.h"
+#include "../source code/Packet.h"
+#include "../source code/Telem.h"
 
-TEST(PayloadTests, TestAddition) {
-    ASSERT_EQ(1 + 1, 3);
+TEST(TelemTest, SetTelemDataCheckLat) {
+    Telem telem(1, 2, 3);
+    ASSERT_EQ(telem.getLat(), 2);
 }
 
 int main(int argc, char **argv){
