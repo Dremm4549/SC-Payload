@@ -151,9 +151,21 @@ int main()
 	([&imageDataObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
-		imageDataObj.downloadImage();
-		jsonResp["Status"] = "IMAGE READ";
+		imageDataObj.SetImageFileSize();
+		imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
+		jsonResp["Status"] = imageDataObj.GetImageFileSize();
+		imageDataObj.StoreImageInMemmory();
 		res.code = 200;
+
+		int i = 0;
+		std::string imgHex = imageDataObj.GetImageHex();
+		std:string respStr = "";
+		while(i <= 65536)
+		{
+			respStr += imgHex[i];
+			i++;
+		}
+		jsonResp["Data"] = respStr;
 
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
