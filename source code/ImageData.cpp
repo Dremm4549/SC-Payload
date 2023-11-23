@@ -35,3 +35,8 @@ std::vector<unsigned char> ImageData::getImage()
 {
 	return data;
 }
+
+std::pair<std::vector<unsigned char>, Telem> ImageData::getCombinedData()
+{
+	return { data, t };
+}

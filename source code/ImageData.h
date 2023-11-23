@@ -45,4 +45,6 @@ public:
 	 * @return std::vector<unsigned char> The image data.
 	 */
 	std::vector<unsigned char> getImage();
+
+	std::pair<std::vector<unsigned char>, Telem> getCombinedData();
 };
