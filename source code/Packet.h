@@ -6,6 +6,7 @@ using namespace std;
 
 #include <cstring>
 #include "json.hpp"
+#include "Telem.h"
 
 /**
  * @brief Class for handling packet data based on a defined protocol.
@@ -20,6 +21,7 @@ private:
 	static const int packetSize = 66560; ///< Fixed size of each packet.
 	static const int seqNumFlagSize = sizeof(int); ///< Size of sequence number flag.
 	static const int endFlagSize = sizeof(int); ///< Size of end flag.
+	Telem telemetryData;
 
 	string IP[7]; ///< Array of IP addresses.
 	std::string destinationID; ///< Destination identifier for the packet.
@@ -38,7 +40,7 @@ public:
 	 * @param destID The destination ID for the packet.
 	 * @param srcID The source ID for the packet.
 	 */
-	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID);
+	Packet(const std::vector<unsigned char>& inputData, const std::string& destID, const std::string& srcID, Telem data);
 	/**
 	 * @brief Packetizes the data into JSON objects.
 	 *

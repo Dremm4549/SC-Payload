@@ -1,4 +1,6 @@
 #include "Telem.h"
+#include <sstream>
+
 Telem::Telem()
 {
 	Long = 0;
@@ -43,4 +45,19 @@ void Telem::setTelem(float Lo, float La, std::time_t T)
 	Long = Lo;
 	Lat = La;
 	time = T;
+}
+
+bool isValid()
+{
+	Telem telem;
+	float Long = telem.getLong();
+	float Lat = telem.getLat();
+	if(Long)
+}
+
+std::string errorResponse(const string& errorCode, const string& errorMsg)
+{
+	std::stringstream err;
+	err << "Error: " << errorCode << ", Message: " << errorMsg;
+	return err.str();
 }

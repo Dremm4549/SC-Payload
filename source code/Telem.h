@@ -70,16 +70,20 @@ public:
 	 * @param Lo Longitude value as a float.
 	 */
 	void setLong(float Lo);
-		/**
+	/**
 	 * @brief Set Lat value.
 	 *
 	 * @param La Latitude value as a float.
 	 */
 	void setLat(float La);
-		/**
+	/**
 	 * @brief Set time value.
 	 *
 	 * @param T Time value as a time_t.
 	 */
 	void setTime(std::time_t T);
+
+	bool isValid();
+
+	std::string errorResponse(const string& errorCode, const string& errorMsg);
 };
