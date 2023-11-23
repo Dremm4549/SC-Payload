@@ -151,8 +151,11 @@ int main()
 	([&imageDataObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
-		imageDataObj.downloadImage();
 		jsonResp["Status"] = "IMAGE READ";
+		jsonResp["Data"] = imageDataObj.getImage();
+		jsonResp["data"]["Long"] = telemetryObj.getLong();
+		jsonResp["data"]["lat"] = telemetryObj.getLat();
+		jsonResp["data"]["temp"] = telemetryObj.getTime();
 		res.code = 200;
 
 		res.set_header("Content-Type", "application/json");
@@ -171,10 +174,11 @@ int main()
 		crow::json::wvalue jsonResp;
 		res.code = 200;
 		jsonResp["Status"] = "OK";
-
+		
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
 		res.end();
+		imageDataObj.downloadImage();
 	});
 
 	app.port(8080).multithreaded().run();
