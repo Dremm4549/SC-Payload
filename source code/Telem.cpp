@@ -47,17 +47,34 @@ void Telem::setTelem(float Lo, float La, std::time_t T)
 	time = T;
 }
 
-bool isValid()
+bool Telem::isValid()
 {
-	Telem telem;
-	float Long = telem.getLong();
-	float Lat = telem.getLat();
-	if(Long)
+	if (Long < -180 || Long > 180)
+	{
+		return false;
+	}
+	if (Lat < -90 || Lat > 90)
+	{
+		return false;
+	}
+	auto validTime = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	if (time > validTime)
+	{
+		return false;
+	}
+	return true;
 }
 
-std::string errorResponse(const string& errorCode, const string& errorMsg)
+std::string Telem::errorResponse(const string& errorCode, const string& errorMsg)
 {
 	std::stringstream err;
 	err << "Error: " << errorCode << ", Message: " << errorMsg;
 	return err.str();
+}
+
+void Telem::updateTelem(float newLong, float newLat, std::time_t newTime)
+{
+	Long = newLong;
+	Lat = newLat;
+	time = newTime;
 }

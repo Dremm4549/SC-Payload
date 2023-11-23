@@ -86,4 +86,6 @@ public:
 	bool isValid();
 
 	std::string errorResponse(const string& errorCode, const string& errorMsg);
+	
+	void updateTelem(float newLong, float newLat, std::time_t newTime);
 };
