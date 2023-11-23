@@ -60,6 +60,44 @@ TEST(PayloadTest, SetPayloadStateFalse) {
     ASSERT_EQ(payload.GetPowerState(), false);
 }
 
+TEST(ImageDataTest, DownloadImage)
+{
+    ImageData imgData;
+    imgData.downloadImage();
+    ASSERT_FALSE(imgData.getImage().empty())
+}
+
+TEST(ImageDataTest, SetTelemetryData)
+{
+    ImageData imgData;
+    Telem telemetry(120.0, 45.0, std::time(nullptr));
+    imgData.setTelemetryData(telemetry);
+
+    auto data = imgData.getCombinedData();
+    ASSERT_EQ(data.second.getLong(), 120);
+    ASSERT_EQ(data.second.getLat(), 45)
+}
+
+TEST(TelemTest, ValidDataCheck)
+{
+    Telem valid(100.0, 50.0, std::time(nullptr));
+    ASSERT_TRUE(valid.isValid());
+}
+
+TEST(TelemTest, InvalidDataCheck)
+{
+    Telem invalid(200.0, 100.0, std::time(nullptr));
+    ASSERT_FALSE(invalid.isValid());
+}
+
+TEST(TelemTest, UpdateAllTelemetry)
+{
+    Telem telem;
+    telem.updateTelem(120.0, 60.0, std::time(nullptr));
+    ASSERT_EQ(telem.getLong(), 120.0);
+    ASSERT_EQ(telem.getLat(), 60.0);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

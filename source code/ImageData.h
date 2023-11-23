@@ -44,6 +44,8 @@ public:
 	 *
 	 * @return std::vector<unsigned char> The image data.
 	 */
+	void setTelemetryData(const Telem& telemetry);
+
 	std::vector<unsigned char> getImage();
 
 	std::pair<std::vector<unsigned char>, Telem> getCombinedData();

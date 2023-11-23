@@ -31,6 +31,11 @@ void ImageData::downloadImage()
 
 }
 
+void ImageData::setTelemetryData(const Telem& telemetry)
+{
+	t = telemetry;
+}
+
 std::vector<unsigned char> ImageData::getImage()
 {
 	return data;
