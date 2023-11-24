@@ -127,7 +127,7 @@ int main()
 				res.code = 200;
 				double longV = readVal["long"].d();
 				double lat = readVal["lat"].d();
-				std::string time = readVal["Time"].d();
+				std::string time = readVal["Time"].s();
 
 
 				telemetryObj.setTelem((float)longV,(float)lat,(std::string)time);
