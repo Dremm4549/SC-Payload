@@ -14,7 +14,7 @@
  * in bytes and manages file operations for reading images.
  */
 
-#define MAXBUFFERSIZE 65536
+#define MAXBUFFERSIZE 65536 ///< Buffer size as defined by project
 
 class ImageData
 {
@@ -25,7 +25,7 @@ private:
 	int totalBytesRead; ///< Total number of bytes read from the file.
 	std::ifstream imageFile; /// To be changed static file
 	char* imageBuffer; ///< Buffer to store image data in bytes.
-	std::string imageHex;
+	std::string imageHex; ///< Hex representation of image data.
 
 public:
 	/**
@@ -70,7 +70,7 @@ public:
 	 * @return std::string The hexidecimal binary data.
 	 */
 	void SetImageFileSize();
-		/**
+	/**
 	 * @brief allowcates space for image buffer
 	 *
 	 * This function takes the stored image file from memory and 
@@ -115,6 +115,12 @@ public:
 	 * @return std::string The hexidecimal binary data.
 	 */
 	void OpenImage(std::string imageToBeOpened);
-
+	/**
+	 * @brief Closes open image file
+	 * 
+	 * This function closes the image file that was opened
+	 * It makes sure that file handling is released properly 
+	 * 
+	*/
 	void CloseImage();
 };
