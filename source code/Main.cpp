@@ -148,7 +148,7 @@ int main()
 
 	CROW_ROUTE(app, "/DownloadImage")
 	.methods("GET"_method)
-	([&imageDataObj](const crow::request& req, crow::response& res) {
+	([&imageDataObj, &telemetryObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
 		jsonResp["Status"] = "IMAGE READ";
@@ -170,7 +170,7 @@ int main()
 
 	CROW_ROUTE(app, "/CaptureImage")
 	.methods("GET"_method)
-	([](const crow::request& req, crow::response& res) {
+	([&imageDataObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 		res.code = 200;
 		jsonResp["Status"] = "OK";
