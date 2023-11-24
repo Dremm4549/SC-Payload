@@ -63,11 +63,16 @@ int main()
 	.methods("GET"_method)
 	([&payloadObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
-		jsonResp["Verb"] = "GET";
-		jsonResp["Source"] = "ourID";
-		jsonResp["destination"] = "theirID";
-		jsonResp["data"]["message"] = payloadObj.GetPowerState();
-				
+		if (payloadObj.GetPowerState() == false)
+		{
+			res.code = 503;
+		}
+		else
+		{
+			jsonResp["data"]["message"] = payloadObj.GetPowerState();
+			res.code = 200;
+		}
+		
 		res.set_header("Content-Type", "application/json");
         res.write(jsonResp.dump());
         res.end();
