@@ -20,10 +20,9 @@ std::string GetTimeStamp()
 	std::tm localTime = *std::localtime(&tt);
 
 	std::stringstream ss;
-	ss << std::put_time(&localTime, "%Y%m%d_%H%M%S");
 	return ss.str();
-
 }
+
 int main()
 {
 
@@ -31,7 +30,10 @@ int main()
 	Payload payloadObj; //create payload object
 	ImageData imageDataObj; //create image data object
 	Telem telemetryObj;
+	Packet packetObj;
 
+	packetObj.readIP();
+	packetObj.PrintIp();
 	//All routes in this main are subject to modification. This just provides a baseline to use so that 1. We have an idea of what routes we need to handle and 2. Other services will be able to communicate with our service.
 	//Current routes are not necessarily final either. The syntax for the routes may need to be changed, some routes can be added/removed, logic obviously still needs to be added for the routes as well.
 	//It should also be known that as of now, these routes have not been tested to even see if they work properly. 
@@ -164,16 +166,27 @@ int main()
 
 	CROW_ROUTE(app, "/DownloadImage")
 	.methods("GET"_method)
-	([&imageDataObj,&payloadObj](const crow::request& req, crow::response& res) {
+	([&imageDataObj, &payloadObj, &packetObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
 		if(payloadObj.GetPowerState())
 		{
+			
 			imageDataObj.OpenImage("../../SpaceImages/Image4.jpg");
 			imageDataObj.SetImageFileSize();
 			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
 			jsonResp["Status"] = imageDataObj.GetImageFileSize();
 			imageDataObj.StoreImageInMemmory();
+
+			if(packetObj.FindService(5))
+			{
+				std::string serviceIp = packetObj.GetServiceIP(1);
+				std::cout << "can send request to " << serviceIp << std::endl;
+			}
+			else{
+				std::cout << "ERROR: cant find dest IP" << std::endl;
+				return;
+			}
 		
 			int i = 0;
 			int byteCounter = 0;
@@ -192,6 +205,8 @@ int main()
 					//send 
 					try
 					{
+						
+
 						//cout << "sequenceNum: " << packetNum << endl; GetTimeStamp()
 						http::Request request{"http://host.docker.internal:9000/poop"};
 						std::string body = "{\"raw\": \"" + sendStr + "\", \"sequenceNumber\": " + std::to_string(packetNum) + ", \"ID\": \"" + GetTimeStamp() + "\"}";
@@ -200,7 +215,7 @@ int main()
 						});
 					
 						
-						//std::cout << std::string{response.body.begin(), response.body.end()} << '\n'; // print the result
+						std::cout << std::string{response.body.begin(), response.body.end()} << '\n';
 					}
 					catch(const std::exception& e)
 					{

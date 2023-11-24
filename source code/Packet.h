@@ -6,6 +6,7 @@ using namespace std;
 
 #include <cstring>
 #include "json.hpp"
+#include <map>
 
 /**
  * @brief Class for handling packet data based on a defined protocol.
@@ -24,6 +25,7 @@ private:
 	string IP[7]; ///< Array of IP addresses.
 	std::string destinationID; ///< Destination identifier for the packet.
 	std::string sourceID; ///< Source identifier for the packet.
+	std::map<int, std::string> serviceDictionary;
 
 public:
 	std::vector<nlohmann::json> Packets; ///< Vector of JSON objects representing packets.
@@ -66,4 +68,16 @@ public:
 	 * @brief Reads and initializes the IP addresses (to be implemented).
 	 */
 	void readIP();
+	/**
+	 * @brief Debugger method to just see what services ips exist in dictionary.
+	 */
+	void PrintIp();
+	/**
+	 * @brief Cheks if service exsits
+	 */
+	bool FindService(int serviceID);
+	/**
+	 * @brief returns service ip
+	 */
+	std::string GetServiceIP(int serviceID);
 };
