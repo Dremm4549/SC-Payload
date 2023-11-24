@@ -57,12 +57,69 @@ string Packet::getIP(int servicenum)
 
 void Packet::readIP()
 {
-    ifstream file("../IP.txt");
-    if (file.is_open()) {
-        for (int i = 0; i < 7; i++)
-        {
-            getline(file, IP[i]);
-        }
-        file.close();
+    ifstream ipconfig("../IP.txt");
+   	std::string line;
+	
+	if (!ipconfig.is_open()) 
+	{
+		return;	
+	}
+
+	while (getline(ipconfig, line)) 
+		{
+			std::istringstream ss(line);
+			std::string token;
+			std::string ip;
+			int counter = 0;
+
+			while (std::getline(ss, token, ',')) 
+			{
+				counter++;
+				if (counter == 2) 
+				{
+					int key = std::stoi(token);
+					serviceDictionary.insert(pair<int, std::string>(key, ip));
+				}
+				else 
+				{
+					ip = token;
+				}			
+			}
+		}
+
+		ipconfig.close();
+}
+
+void Packet::PrintIp(){
+	for(const auto& entry : serviceDictionary){
+		std::cout << "Service ID: " << entry.first << std::endl;
+	}
+
+}
+
+bool Packet::FindService(int serviceKey)
+{
+	// PrintIp();
+
+	 if(serviceDictionary.find(serviceKey)!=serviceDictionary.end()){
+      //if the element is found before the end of the map
+	  return true;
+      //if the element is present then you can access it using the index
     }
+	else
+	{
+		return false;
+	}
+	// std::string key = "5";
+	// if (serviceDictionary.find(5) != serviceDictionary.end()) {
+    //     std::cout << "Key " << key << " exists in the map." << std::endl;
+    // } else {
+    //     std::cout << "Key " << key << " does not exist in the map." << std::endl;
+    // }
+}
+
+std::string Packet::GetServiceIP(int serviceID)
+{
+	 std::string serviceIp = serviceDictionary[serviceID];
+	 return serviceIp;
 }

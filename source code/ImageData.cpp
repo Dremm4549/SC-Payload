@@ -101,7 +101,7 @@ std::string ImageData::GetImageHex()
 
 void ImageData::OpenImage(std::string imageToBeOpened)
 {
-	imageFile.open(imageToBeOpened);
+	imageFile.open(imageToBeOpened,std::ios::binary | std::ios::in | std::ios::ate);
 }
 
 void ImageData::CloseImage()
