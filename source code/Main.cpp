@@ -130,7 +130,7 @@ int main()
 				double time = readVal["Time"].d();
 
 
-				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
+				telemetryObj.setTelem((float)longV,(float)lat,(float)Time);
 			}
 			else
 			{
