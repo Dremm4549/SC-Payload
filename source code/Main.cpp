@@ -103,7 +103,6 @@ int main()
 				jsonResp["data"]["lat"] = telemetryObj.getLat();
 				jsonResp["data"]["temp"] = telemetryObj.getTime();
 			}
-			
 
 
 			res.set_header("Content-Type", "application/json");
@@ -128,13 +127,15 @@ int main()
 				res.code = 200;
 				double longV = readVal["long"].d();
 				double lat = readVal["lat"].d();
-				double temp = readVal["Time"].d();
+				double time = readVal["Time"].d();
+
 
 				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
 			}
 			else
 			{
 				res.code = 400;
+
 			}
 		}
 
@@ -149,13 +150,16 @@ int main()
 	/// the binary into hexademical and pactektizing it for transmission
 	/// </summary>
 
-	CROW_ROUTE(app, "/DownloadImage")
+	CROW_ROUTE(app, "/downloadImage")
 	.methods("GET"_method)
-	([&imageDataObj](const crow::request& req, crow::response& res) {
+	([&imageDataObj, &telemetryObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
-		imageDataObj.downloadImage();
 		jsonResp["Status"] = "IMAGE READ";
+		jsonResp["Data"]["image"] = imageDataObj.getImage();
+		jsonResp["data"]["Long"] = telemetryObj.getLong();
+		jsonResp["data"]["lat"] = telemetryObj.getLat();
+		jsonResp["data"]["time"] = telemetryObj.getTime();
 		res.code = 200;
 
 		res.set_header("Content-Type", "application/json");
