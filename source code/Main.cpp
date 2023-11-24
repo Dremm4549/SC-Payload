@@ -36,22 +36,17 @@ int main()
 		const char* state = req.url_params.get("state");
 		crow::json::wvalue jsonResp;
 		if(state){
-			if(strcmp(state, "true") == 0){
+			if(strcmp(state, "true") == 0 && payloadObj.GetPowerState() == false) {
 				payloadObj.SetPowerState(true);
-				jsonResp["Verb"] = "PUT";
-				jsonResp["Source"] = "ourId";
-				jsonResp["destination"] = "theirId";
-				jsonResp["numPacketsExpected"] = 1;
-				jsonResp["data"]["message"] = "Payload is on";
+				res.code = 200;
 			}
-			else if(strcmp(state, "false") == 0){
+			else if(strcmp(state, "false") == 0 && payloadObj.GetPowerState == true){
 				payloadObj.SetPowerState(false);
 				res.code = 200;
-				jsonResp["Verb"] = "PUT";
-				jsonResp["Source"] = "ourId";
-				jsonResp["destination"] = "theirId";
-				jsonResp["numPacketsExpected"] = 1;
-				jsonResp["data"]["message"] = "Payload is off";
+			}
+			else
+			{
+				res.code = 400;
 			}
 		}
 
