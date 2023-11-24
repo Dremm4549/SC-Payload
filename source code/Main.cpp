@@ -97,7 +97,7 @@ int main()
 			jsonResp["Status"] = "OK";
 			jsonResp["data"]["Long"] = telemetryObj.getLong();
 			jsonResp["data"]["lat"] = telemetryObj.getLat();
-			jsonResp["data"]["temp"] = telemetryObj.getTime();
+			jsonResp["data"]["time"] = telemetryObj.getTime();
 
 
 			res.set_header("Content-Type", "application/json");
@@ -122,9 +122,9 @@ int main()
 				res.code = 200;
 				double longV = readVal["long"].d();
 				double lat = readVal["lat"].d();
-				double temp = readVal["Time"].d();
+				double time = readVal["Time"].d();
 
-				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
+				telemetryObj.setTelem((float)longV,(float)lat,(float)time);
 				
 				jsonResp["Data"]["Long"] = telemetryObj.getLong();
 				jsonResp["Data"]["lat"] = telemetryObj.getLat();
@@ -146,13 +146,16 @@ int main()
 	/// the binary into hexademical and pactektizing it for transmission
 	/// </summary>
 
-	CROW_ROUTE(app, "/DownloadImage")
+	CROW_ROUTE(app, "/downloadImage")
 	.methods("GET"_method)
-	([&imageDataObj](const crow::request& req, crow::response& res) {
+	([&imageDataObj, &telemetryObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
-		imageDataObj.downloadImage();
 		jsonResp["Status"] = "IMAGE READ";
+		jsonResp["Data"]["image"] = imageDataObj.getImage();
+		jsonResp["data"]["Long"] = telemetryObj.getLong();
+		jsonResp["data"]["lat"] = telemetryObj.getLat();
+		jsonResp["data"]["time"] = telemetryObj.getTime();
 		res.code = 200;
 
 		res.set_header("Content-Type", "application/json");
@@ -167,14 +170,15 @@ int main()
 
 	CROW_ROUTE(app, "/CaptureImage")
 	.methods("GET"_method)
-	([](const crow::request& req, crow::response& res) {
+	([&imageDataObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 		res.code = 200;
 		jsonResp["Status"] = "OK";
-
+		
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
 		res.end();
+		imageDataObj.downloadImage();
 	});
 
 	app.port(8080).multithreaded().run();
