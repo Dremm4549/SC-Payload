@@ -6,7 +6,7 @@ Telem::Telem()
 	time = std::time(nullptr);
 }
 
-Telem::Telem(float Long, float Lat, std::time_t Time) : Long(Long), Lat(Lat), time(Time) 
+Telem::Telem(float Long, float Lat, std::string Time) : Long(Long), Lat(Lat), time(Time) 
 {
 
 }
@@ -21,7 +21,7 @@ float Telem::getLat()
 	return Lat;
 }
 
-std::time_t Telem::getTime()
+std::string Telem::getTime()
 {
 	return time;
 }
@@ -34,11 +34,11 @@ void Telem::setLat(float La){
 	Lat = La;
 }
 
-void Telem::setTime(std::time_t T){
+void Telem::setTime(std::string T){
 	time = T;
 }
 
-void Telem::setTelem(float Lo, float La, std::time_t T)
+void Telem::setTelem(float Lo, float La, std::string T)
 {
 	Long = Lo;
 	Lat = La;
