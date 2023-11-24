@@ -124,22 +124,19 @@ int main()
 		readVal = crow::json::load(req.body);
 
 		if(readVal){
-			if(readVal.has("long") && readVal.has("lat") && readVal.has("Time")){
+			if(readVal.has("long") && readVal.has("lat") && readVal.has("Time")&& payloadObj.GetPowerState() == true){
 				res.code = 200;
 				double longV = readVal["long"].d();
 				double lat = readVal["lat"].d();
 				double temp = readVal["Time"].d();
 
 				telemetryObj.setTelem((float)longV,(float)lat,(float)temp);
-				
-				jsonResp["Data"]["Long"] = telemetryObj.getLong();
-				jsonResp["Data"]["lat"] = telemetryObj.getLat();
-				jsonResp["Data"]["time"] = telemetryObj.getTime();
+			}
+			else
+			{
+				res.code = 400;
 			}
 		}
-		
-		res.code = 200;
-		jsonResp["status"] = "SUCCESS";	
 
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
@@ -166,22 +163,6 @@ int main()
 		res.end();
 	});	
 
-	/// <summary>
-	/// Similar to the Download image but its supposed to 
-	/// represnt the act of taking a photo from space.
-	/// </summary>
-
-	CROW_ROUTE(app, "/CaptureImage")
-	.methods("GET"_method)
-	([](const crow::request& req, crow::response& res) {
-		crow::json::wvalue jsonResp;
-		res.code = 200;
-		jsonResp["Status"] = "OK";
-
-		res.set_header("Content-Type", "application/json");
-		res.write(jsonResp.dump());
-		res.end();
-	});
 
 	app.port(8080).multithreaded().run();
     return 0;
