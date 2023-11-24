@@ -117,7 +117,7 @@ int main()
 	/// </summary>
 	CROW_ROUTE(app, "/SetTelemetry")
 	.methods("PUT"_method)
-	([&telemetryObj](const crow::request& req, crow::response& res) {
+	([&telemetryObj, &payloadObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 		crow::json::rvalue readVal;
 
