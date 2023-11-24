@@ -15,7 +15,7 @@ class Telem
 private:
 	float Long; ///< Longitude value.
 	float Lat; ///< Latitude value.
-	std::time_t time; ///< Time value.
+	std::string time; ///< Time value.
 
 public:
 	/**
@@ -27,7 +27,7 @@ public:
 	/**
 	 * @brief Constructor for the Telem class.
 	 *
-	 * Initializes longitude, latitude to set values and ttime to zero.
+	 * Initializes longitude, latitude to set values and time to zero.
 	 */
 	Telem(float Long, float Lat);
 	/**
@@ -35,9 +35,9 @@ public:
 	 *
 	 * @param Long Longitude value as a float.
 	 * @param Lat Latitude value as a float.
-	 * @param Time Time value as a time_t.
+	 * @param Time Time value as a string.
 	 */
-	Telem(float Long, float Lat, std::time_t Time);
+	Telem(float Long, float Lat, std::string Time);
 	/**
 	 * @brief Get the longitude value.
 	 *
@@ -53,17 +53,17 @@ public:
 	/**
 	 * @brief Get the time value.
 	 *
-	 * @return time_t Current time value.
+	 * @return string Current time value.
 	 */
-	std::time_t getTime();
+	std::string getTime();
 	/**
 	 * @brief Set all telemetry values at once.
 	 *
 	 * @param Lo Longitude value as a float.
 	 * @param La Latitude value as a float.
-	 * @param T Time value as a time_t.
+	 * @param T Time value as a string.
 	 */
-	void setTelem(float Lo, float La, std::time_t T);
+	void setTelem(float Lo, float La, std::string T);
 	/**
 	 * @brief Set Long value.
 	 *
@@ -79,7 +79,7 @@ public:
 		/**
 	 * @brief Set time value.
 	 *
-	 * @param T Time value as a time_t.
+	 * @param T Time value as a string.
 	 */
-	void setTime(std::time_t T);
+	void setTime(std::string T);
 };
