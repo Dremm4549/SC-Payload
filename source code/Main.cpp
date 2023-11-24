@@ -146,7 +146,7 @@ int main()
 	/// the binary into hexademical and pactektizing it for transmission
 	/// </summary>
 
-	CROW_ROUTE(app, "/DownloadImage")
+	CROW_ROUTE(app, "/downloadImage")
 	.methods("GET"_method)
 	([&imageDataObj, &telemetryObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
