@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <sstream>
+#include <iomanip>
 /**
  * @brief Class to handle image data operations.
  *
@@ -12,6 +14,8 @@
  * in bytes and manages file operations for reading images.
  */
 
+#define MAXBUFFERSIZE 65536
+
 class ImageData
 {
 private:
@@ -19,6 +23,9 @@ private:
 	Telem t; ///< Telemetry object (if used for additional metadata or operations).
 	int fileSize; ///< Size of the image file in bytes.
 	int totalBytesRead; ///< Total number of bytes read from the file.
+	std::ifstream imageFile; /// To be changed static file
+	char* imageBuffer; ///< Buffer to store image data in bytes.
+	std::string imageHex;
 
 public:
 	/**
@@ -45,4 +52,69 @@ public:
 	 * @return std::vector<unsigned char> The image data.
 	 */
 	std::vector<unsigned char> getImage();
+	/**
+	 * @brief Converts image binary to HEX
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	std::string ConvertBinaryToHex(const std::string& s, bool upper_case);
+	/**
+	 * @brief allowcates space for image buffer
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	void SetImageFileSize();
+		/**
+	 * @brief allowcates space for image buffer
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	int GetImageFileSize();
+	/**
+	 * @brief allowcates image buffer array
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	 std::vector<char> AllocateImageBuffer(int size);
+	/**
+	 * @brief allowcates image buffer array
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	void StoreImageInMemmory();
+	/**
+	 * @brief allowcates image buffer array
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	std::string GetImageHex();
+	/**
+	 * @brief allowcates image buffer array
+	 *
+	 * This function takes the stored image file from memory and 
+	 * converts it to hexidecimal
+	 *
+	 * @return std::string The hexidecimal binary data.
+	 */
+	void OpenImage(std::string imageToBeOpened);
+
+	void CloseImage();
 };

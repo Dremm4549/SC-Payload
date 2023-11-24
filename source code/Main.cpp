@@ -6,7 +6,24 @@
 #include "ImageData.h"
 #include "Packet.h"
 #include <iostream>
+#include "HTTPRequest.hpp"
 
+#define MAXBUFFERSIZE 65536
+
+
+std::string GetTimeStamp()
+{
+	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+
+	std::time_t tt = std::chrono::system_clock::to_time_t(now);
+
+	std::tm localTime = *std::localtime(&tt);
+
+	std::stringstream ss;
+	ss << std::put_time(&localTime, "%Y%m%d_%H%M%S");
+	return ss.str();
+
+}
 int main()
 {
 
@@ -104,7 +121,6 @@ int main()
 				jsonResp["data"]["temp"] = telemetryObj.getTime();
 			}
 
-
 			res.set_header("Content-Type", "application/json");
 			res.write(jsonResp.dump());
 			res.end();
@@ -152,16 +168,89 @@ int main()
 
 	CROW_ROUTE(app, "/downloadImage")
 	.methods("GET"_method)
-	([&imageDataObj, &telemetryObj](const crow::request& req, crow::response& res) {
+	([&imageDataObj,&payloadObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
-		jsonResp["Status"] = "IMAGE READ";
-		jsonResp["Data"]["image"] = imageDataObj.getImage();
-		jsonResp["data"]["Long"] = telemetryObj.getLong();
-		jsonResp["data"]["lat"] = telemetryObj.getLat();
-		jsonResp["data"]["time"] = telemetryObj.getTime();
-		res.code = 200;
+		if(payloadObj.GetPowerState())
+		{
+			imageDataObj.OpenImage("../../SpaceImages/Image4.jpg");
+			imageDataObj.SetImageFileSize();
+			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
+			jsonResp["Status"] = imageDataObj.GetImageFileSize();
+			imageDataObj.StoreImageInMemmory();
+		
+			int i = 0;
+			int byteCounter = 0;
+			int packetNum = 0;
 
+			std::string imgHex = imageDataObj.GetImageHex();
+			std:string respStr = "";
+			std::string sendStr = "";
+			while(imgHex[i] != '\0')
+			{
+				sendStr += imgHex[i];
+				
+				if (byteCounter == MAXBUFFERSIZE) 
+				{
+					//send 
+					try
+					{
+						//cout << "sequenceNum: " << packetNum << endl; GetTimeStamp()
+						http::Request request{"http://host.docker.internal:9000/poop"};
+						std::string body = "{\"raw\": \"" + sendStr + "\", \"sequenceNumber\": " + std::to_string(packetNum) + ", \"ID\": \"" + GetTimeStamp() + "\"}";
+						const auto response = request.send("POST", body, {
+						{"Content-Type", "application/json"}
+						});
+					
+						
+						//std::cout << std::string{response.body.begin(), response.body.end()} << '\n'; // print the result
+					}
+					catch(const std::exception& e)
+					{
+						std::cerr << "Request failed, error: " << e.what() << '\n';
+					}
+
+					sendStr.clear();
+					byteCounter = 0;
+					packetNum++;
+				}
+
+				i++;
+				byteCounter++;
+			}
+
+			if (byteCounter > 0) 
+			{
+				//send
+				try
+				{
+					http::Request request{"http://host.docker.internal:9000/poop"};
+					std::string body = "{\"data\": \"" + sendStr + "\", \"sequenceNumber\": " + std::to_string(packetNum) + "}";
+					const auto response = request.send("POST", body, {
+					{"Content-Type", "application/json"}
+					});
+				
+					std::cout << std::string{response.body.begin(), response.body.end()} << '\n'; // print the result
+				}
+				catch(const std::exception& e)
+				{
+					std::cerr << "Request failed, error: " << e.what() << '\n';
+				}
+
+				sendStr.clear();
+				packetNum++;
+				byteCounter = 0;
+			}
+			imageDataObj.CloseImage();
+			res.code = 200;
+			jsonResp["Status"] = "SUCCESS";
+		}
+		else
+		{
+			res.code = 400;
+		}
+	
+		
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
 		res.end();
