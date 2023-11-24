@@ -40,7 +40,7 @@ int main()
 				payloadObj.SetPowerState(true);
 				res.code = 200;
 			}
-			else if (strcmp(state, "false") == 0 && payloadObj.GetPowerState == true) {
+			else if(strcmp(state, "false") == 0 && payloadObj.GetPowerState() == true){
 				payloadObj.SetPowerState(false);
 				res.code = 200;
 			}
