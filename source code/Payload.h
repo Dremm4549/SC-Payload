@@ -9,7 +9,7 @@
 class Payload
 {
 private:
-	bool powerState;
+	bool powerState; ///< Represents the power state of the payload
 
 
 public:
