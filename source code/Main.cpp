@@ -55,11 +55,11 @@ int main()
 		const char* state = req.url_params.get("state");
 		crow::json::wvalue jsonResp;
 		if (state) {
-			if (strcmp(state, "true") == 0 && payloadObj.GetPowerState() == false) {
+			if (strcmp(state, "true") == 0) {
 				payloadObj.SetPowerState(true);
 				res.code = 200;
 			}
-			else if(strcmp(state, "false") == 0 && payloadObj.GetPowerState() == true){
+			else if(strcmp(state, "false") == 0){
 				payloadObj.SetPowerState(false);
 				res.code = 200;
 			}
@@ -168,7 +168,7 @@ int main()
 	/// the binary into hexademical and pactektizing it for transmission
 	/// </summary>
 
-	CROW_ROUTE(app, "/downloadImage")
+	CROW_ROUTE(app, "/DownloadImage")
 	.methods("GET"_method)
 	([&imageDataObj, &payloadObj, &packetObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
@@ -176,7 +176,7 @@ int main()
 		if(payloadObj.GetPowerState())
 		{
 			
-			imageDataObj.OpenImage("../../SpaceImages/Image4.jpg");
+			imageDataObj.OpenImage("../../Images/Image4.jpg");
 			imageDataObj.SetImageFileSize();
 			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
 			jsonResp["Status"] = imageDataObj.GetImageFileSize();
