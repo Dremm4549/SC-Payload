@@ -9,17 +9,16 @@
 #include "HTTPRequest.hpp"
 
 #define MAXBUFFERSIZE 65536
-
+using json = nlohmann::json;
 
 std::string GetTimeStamp()
 {
 	std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-
 	std::time_t tt = std::chrono::system_clock::to_time_t(now);
-
 	std::tm localTime = *std::localtime(&tt);
-
+///yyyy__
 	std::stringstream ss;
+	ss << std::put_time(&localTime, "%Y%m%d_%H%M%s");
 	return ss.str();
 }
 
@@ -38,11 +37,7 @@ int main()
 	//Current routes are not necessarily final either. The syntax for the routes may need to be changed, some routes can be added/removed, logic obviously still needs to be added for the routes as well.
 	//It should also be known that as of now, these routes have not been tested to even see if they work properly. 
 
-	// Correct the lambda function declaration
 
-	CROW_ROUTE(app, "/")([]() {
-		return "Hello world";
-		});
 
 	/// <summary>
 	/// This route listens for a put request that and querys 
@@ -179,7 +174,7 @@ int main()
 			imageDataObj.OpenImage("../../Images/Image4.jpg");
 			imageDataObj.SetImageFileSize();
 			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
-			jsonResp["Status"] = imageDataObj.GetImageFileSize();
+			jsonResp["size"] = imageDataObj.GetImageFileSize();
 			imageDataObj.StoreImageInMemmory();
 
 			if(packetObj.FindService(5))
@@ -197,8 +192,19 @@ int main()
 			int packetNum = 0;
 
 			std::string imgHex = imageDataObj.GetImageHex();
+			imageDataObj.CloseImage();
+
+			//calculate the number of packets that need to send
+			float packetToBeSent = (float)imageDataObj.GetImageFileSize() / (float)MAXBUFFERSIZE;
+			int packetRemainder = imageDataObj.GetImageFileSize() % MAXBUFFERSIZE;
+
+			if(packetRemainder > 0){
+				packetToBeSent += 1;
+			}		
+
 			std:string respStr = "";
 			std::string sendStr = "";
+
 			while(imgHex[i] != '\0')
 			{
 				sendStr += imgHex[i];
@@ -208,25 +214,37 @@ int main()
 					//send 
 					try
 					{
-						
+						json j;
+						j["raw"] = sendStr;
+						j["sequenceNumber"] = packetNum;
+						std::string timeStamp = GetTimeStamp();
+						j["ID"] = timeStamp;
+						if(packetNum == packetToBeSent)
+						{
+							j["finFlag"] = true;
+						}
+						else
+						{
+							j["finFlag"] = false;
+						}
 
-						//cout << "sequenceNum: " << packetNum << endl; GetTimeStamp()
+						std::string body = j.dump();
 						http::Request request{"http://host.docker.internal:9000/poop"};
-						std::string body = "{\"raw\": \"" + sendStr + "\", \"sequenceNumber\": " + std::to_string(packetNum) + ", \"ID\": \"" + GetTimeStamp() + "\"}";
+					
 						const auto response = request.send("POST", body, {
 						{"Content-Type", "application/json"}
 						});
 					
-						
+						byteCounter = 0;
 						std::cout << std::string{response.body.begin(), response.body.end()} << '\n';
+						
 					}
 					catch(const std::exception& e)
 					{
 						std::cerr << "Request failed, error: " << e.what() << '\n';
 					}
-
+					
 					sendStr.clear();
-					byteCounter = 0;
 					packetNum++;
 				}
 
@@ -234,13 +252,20 @@ int main()
 				byteCounter++;
 			}
 
-			if (byteCounter > 0) 
+			if (byteCounter > 0 && packetRemainder > 0) 
 			{
 				//send
 				try
 				{
 					http::Request request{"http://host.docker.internal:9000/poop"};
-					std::string body = "{\"data\": \"" + sendStr + "\", \"sequenceNumber\": " + std::to_string(packetNum) + "}";
+					json j;
+					j["raw"] = sendStr;
+					j["sequenceNumber"] = packetNum;
+					std::string timeStamp = GetTimeStamp();
+					j["ID"] = timeStamp;
+					j["finFlag"] = true;
+					std::string body = j.dump();
+
 					const auto response = request.send("POST", body, {
 					{"Content-Type", "application/json"}
 					});
@@ -256,7 +281,7 @@ int main()
 				packetNum++;
 				byteCounter = 0;
 			}
-			imageDataObj.CloseImage();
+			
 			res.code = 200;
 			jsonResp["Status"] = "SUCCESS";
 		}
