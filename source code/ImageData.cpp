@@ -20,7 +20,7 @@ void ImageData::downloadImage()
 	file.seekg(0, std::ios::end);
 	std::streampos fileSize = file.tellg();
 	if (fileSize > 0) {
-		std::cout << std::endl << fileSize << std::endl;
+		//std::cout << std::endl << fileSize << std::endl;
 	}
 
 	char* imageBuffer = new char[fileSize];
