@@ -171,7 +171,7 @@ int main()
 		if(payloadObj.GetPowerState())
 		{
 			
-			imageDataObj.OpenImage("../../Images/Jokes.png");
+			imageDataObj.OpenImage(imageDataObj.GenerateNewImage());
 			imageDataObj.SetImageFileSize();
 			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
 			jsonResp["size"] = imageDataObj.GetImageFileSize();

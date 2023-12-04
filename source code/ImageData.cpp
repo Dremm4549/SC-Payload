@@ -135,5 +135,23 @@ void ImageData::CloseImage()
 	imageFile.close();
 }
 
+std::string ImageData::GenerateNewImage()
+{
+	std::string imageDirectory = "../../SpaceImages";
+	std::vector <std::string> images;
+	std::string selectedImage = "";
+
+	for(const auto& image : std::filesystem::directory_iterator(imageDirectory)){
+		images.push_back(image.path().string());
+	}
+
+	srand(time(0));
+
+	int rng = (rand()  % images.size());
+
+	selectedImage = images[rng];
+	return  selectedImage;
+}
+
 
 
