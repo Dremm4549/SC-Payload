@@ -171,7 +171,7 @@ int main()
 		if(payloadObj.GetPowerState())
 		{
 			
-			imageDataObj.OpenImage("../../Images/Image4.jpg");
+			imageDataObj.OpenImage("../../Images/Jokes.png");
 			imageDataObj.SetImageFileSize();
 			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
 			jsonResp["size"] = imageDataObj.GetImageFileSize();
@@ -216,16 +216,16 @@ int main()
 					{
 						json j;
 						j["raw"] = sendStr;
-						j["sequenceNumber"] = packetNum;
-						std::string timeStamp = GetTimeStamp();
+						j["sequencenumber"] = packetNum;
+						std::string timeStamp = "2";
 						j["ID"] = timeStamp;
 						if(packetNum == packetToBeSent)
 						{
-							j["finFlag"] = true;
+							j["finflag"] = true;
 						}
 						else
 						{
-							j["finFlag"] = false;
+							j["finflag"] = false;
 						}
 
 						std::string body = j.dump();
@@ -260,10 +260,10 @@ int main()
 					http::Request request{"http://host.docker.internal:9000/poop"};
 					json j;
 					j["raw"] = sendStr;
-					j["sequenceNumber"] = packetNum;
-					std::string timeStamp = GetTimeStamp();
+					j["sequencenumber"] = packetNum;
+					std::string timeStamp = "2";
 					j["ID"] = timeStamp;
-					j["finFlag"] = true;
+					j["finflag"] = true;
 					std::string body = j.dump();
 
 					const auto response = request.send("POST", body, {
