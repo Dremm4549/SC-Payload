@@ -8,7 +8,7 @@ ImageData::ImageData()
 }
 void ImageData::downloadImage()
 {
-	std::string filePath = "../../SpaceImages";
+	std::string filePath = "../../Images";
 
 	std::ifstream file(filePath, std::ios::binary);
 
@@ -90,11 +90,7 @@ void ImageData::StoreImageInMemmory()
 
 	imageFile.read(tmpimageBuffer, fileSize);
 	
-	imageFile.close();
-
 	imageHex = ConvertBinaryToHex(tmpimageBuffer, fileSize, true);
-
-	std::cout << "size: " << imageHex.size() << std::endl;
 	// if(ConvertHexToBinaryAndWriteToFile(imageHex, "./output.jpg"))
 	// {
 	// 	std::cout << "word";
@@ -133,16 +129,18 @@ void ImageData::OpenImage(std::string imageToBeOpened)
 void ImageData::CloseImage()
 {
 	imageFile.close();
+	imageFile.clear();
 }
 
 std::string ImageData::GenerateNewImage()
 {
-	std::string imageDirectory = "../../SpaceImages";
+	std::string imageDirectory = "../../Images";
 	std::vector <std::string> images;
 	std::string selectedImage = "";
 
 	for(const auto& image : std::filesystem::directory_iterator(imageDirectory)){
 		images.push_back(image.path().string());
+		
 	}
 
 	srand(time(0));
@@ -150,6 +148,7 @@ std::string ImageData::GenerateNewImage()
 	int rng = (rand()  % images.size());
 
 	selectedImage = images[rng];
+	std::cout << selectedImage << std::endl;
 	return  selectedImage;
 }
 

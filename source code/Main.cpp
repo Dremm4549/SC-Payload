@@ -142,7 +142,6 @@ int main()
 				double lat = readVal["lat"].d();
 				std::string time = readVal["Time"].s();
 
-
 				telemetryObj.setTelem((float)longV,(float)lat,(std::string)time);
 			}
 			else
@@ -170,12 +169,14 @@ int main()
 
 		if(payloadObj.GetPowerState())
 		{
-			
-			imageDataObj.OpenImage(imageDataObj.GenerateNewImage());
-			imageDataObj.SetImageFileSize();
-			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
-			jsonResp["size"] = imageDataObj.GetImageFileSize();
+			std::string selectedImage = imageDataObj.GenerateNewImage();
+			std::cout << selectedImage << std::endl;
+			imageDataObj.OpenImage(selectedImage);
+		//	imageDataObj.SetImageFileSize();
+			//imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
+			//jsonResp["size"] = imageDataObj.GetImageFileSize();
 			imageDataObj.StoreImageInMemmory();
+			imageDataObj.CloseImage();
 
 			if(packetObj.FindService(5))
 			{
@@ -195,12 +196,13 @@ int main()
 			imageDataObj.CloseImage();
 
 			//calculate the number of packets that need to send
-			float packetToBeSent = (float)imageDataObj.GetImageFileSize() / (float)MAXBUFFERSIZE;
+			float packetToBeSent = (float)imgHex.size() / (float)MAXBUFFERSIZE;
 			int packetRemainder = imageDataObj.GetImageFileSize() % MAXBUFFERSIZE;
-
-			if(packetRemainder > 0){
-				packetToBeSent += 1;
-			}		
+			std::cout << "The buffer has: " << imageDataObj.GetImageFileSize() << std::endl << " This many characters in string " << imgHex.size() << std::endl;
+			std::cout << "The packets to be sent has: " << packetToBeSent << " and this many remaning bytes remaning" << packetRemainder<< std:: endl;
+			// if(packetRemainder > 0){
+			// 	packetToBeSent += 1;
+			// }		
 
 			std:string respStr = "";
 			std::string sendStr = "";
@@ -219,6 +221,7 @@ int main()
 						j["sequencenumber"] = packetNum;
 						std::string timeStamp = "2";
 						j["ID"] = timeStamp;
+						
 						if(packetNum == packetToBeSent)
 						{
 							j["finflag"] = true;
@@ -229,6 +232,7 @@ int main()
 						}
 
 						std::string body = j.dump();
+						
 						http::Request request{"http://host.docker.internal:9000/poop"};
 					
 						const auto response = request.send("POST", body, {
@@ -236,6 +240,7 @@ int main()
 						});
 					
 						byteCounter = 0;
+						sendStr.clear();
 						std::cout << std::string{response.body.begin(), response.body.end()} << '\n';
 						
 					}
@@ -245,12 +250,20 @@ int main()
 					}
 					
 					sendStr.clear();
+					std::cout << packetNum << "out of " << packetToBeSent << std::endl;
 					packetNum++;
 				}
 
 				i++;
 				byteCounter++;
 			}
+
+			// if(byteCounter > 0 && packetRemainder > 0)
+			// {
+			// 	std::cout << " current str size " << imgHex.size() << std::endl;
+			// 	std::cout << "Okay start from" << i << " Go till " << imgHex.size() << " current str: "<< sendStr << std::endl;
+				
+			// }
 
 			if (byteCounter > 0 && packetRemainder > 0) 
 			{
@@ -279,6 +292,7 @@ int main()
 
 				sendStr.clear();
 				packetNum++;
+				std::cout << packetNum << "out of " << packetToBeSent << std::endl;
 				byteCounter = 0;
 			}
 			
