@@ -60,7 +60,10 @@ public:
 	 *
 	 * @return std::string The hexidecimal binary data.
 	 */
-	std::string ConvertBinaryToHex(const std::string& s, bool upper_case);
+	std::string ConvertBinaryToHex(const char* buffer, size_t size, bool upper_case);
+
+	bool ConvertHexToBinaryAndWriteToFile(const std::string& hexStr, const std::string& outputPath);
+
 	/**
 	 * @brief allowcates space for image buffer
 	 *

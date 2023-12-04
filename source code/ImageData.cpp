@@ -37,21 +37,19 @@ std::vector<unsigned char> ImageData::getImage()
 	return data;
 }
 
-std::string ImageData::ConvertBinaryToHex(const std::string& s, bool upper_case) 
-{
-	std::ostringstream ret;
-
-	for (std::string::size_type i = 0; i < s.length(); i++) 
-	{
-		ret << std::hex << std::setfill('0') << std::setw(2) << (upper_case ? std::uppercase : std::nouppercase) << (int)s[i];
-	}
-
-	return ret.str();
+std::string ImageData::ConvertBinaryToHex(const char* buffer, size_t size, bool upper_case) {
+    std::ostringstream ret;
+    for (size_t i = 0; i < size; ++i) {
+        ret << std::hex << std::setfill('0') << std::setw(2)
+            << (upper_case ? std::uppercase : std::nouppercase)
+            << static_cast<int>(static_cast<unsigned char>(buffer[i]));
+    }
+    return ret.str();
 }
+
 
 void ImageData::SetImageFileSize()
 {
-
 	if (!imageFile.is_open()) 
 	{
 		std::cerr << "FAILED TO OPEN FILE" << std::endl;
@@ -65,7 +63,6 @@ void ImageData::SetImageFileSize()
 		fileSize = imgFileSize;
 	}
 
-	
 }
 
 int ImageData::GetImageFileSize(){
@@ -85,13 +82,42 @@ void ImageData::StoreImageInMemmory()
 		return;
 	}
 	
+	imageFile.seekg(0, std::ios::end);
+	fileSize = imageFile.tellg();
 	imageFile.seekg(0, std::ios::beg);
-	imageFile.read(imageBuffer, fileSize);
+
+	char* tmpimageBuffer = new char[fileSize];
+
+	imageFile.read(tmpimageBuffer, fileSize);
 	
 	imageFile.close();
 
-	imageHex = ConvertBinaryToHex(std::string(imageBuffer, imageBuffer + fileSize), true);
+	imageHex = ConvertBinaryToHex(tmpimageBuffer, fileSize, true);
 
+	std::cout << "size: " << imageHex.size() << std::endl;
+	// if(ConvertHexToBinaryAndWriteToFile(imageHex, "./output.jpg"))
+	// {
+	// 	std::cout << "word";
+	// }
+
+}
+
+bool ImageData::ConvertHexToBinaryAndWriteToFile(const std::string& hexStr, const std::string& outputPath)
+{
+	std::ofstream outputFile(outputPath, std::ios::binary);
+    if (!outputFile.is_open()) {
+        std::cerr << "Failed to open output file." << std::endl;
+        return false;
+    }
+
+    for (size_t i = 0; i < hexStr.length(); i += 2) {
+        std::string byteString = hexStr.substr(i, 2);
+        char byte = static_cast<char>(std::stoi(byteString, nullptr, 16));
+        outputFile.write(&byte, sizeof(char));
+    }
+
+    outputFile.close();
+    return true;
 }
 
 std::string ImageData::GetImageHex()
