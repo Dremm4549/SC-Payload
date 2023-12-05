@@ -91,10 +91,10 @@ void ImageData::StoreImageInMemmory()
 	imageFile.read(tmpimageBuffer, fileSize);
 	
 	imageHex = ConvertBinaryToHex(tmpimageBuffer, fileSize, true);
-	// if(ConvertHexToBinaryAndWriteToFile(imageHex, "./output.jpg"))
-	// {
-	// 	std::cout << "word";
-	// }
+	if(ConvertHexToBinaryAndWriteToFile(imageHex, "./output.jpg"))
+	{
+		std::cout << "word";
+	}
 
 }
 

@@ -219,12 +219,13 @@ int main()
 						json j;
 						j["raw"] = sendStr;
 						j["sequencenumber"] = packetNum;
-						std::string timeStamp = "2";
+						std::string timeStamp = "6";
 						j["ID"] = timeStamp;
 						
 						if(packetNum == packetToBeSent)
 						{
 							j["finflag"] = true;
+							std::cout << "sending fin" << std::endl;
 						}
 						else
 						{
@@ -233,7 +234,7 @@ int main()
 
 						std::string body = j.dump();
 						
-						http::Request request{"http://host.docker.internal:9000/poop"};
+						http::Request request{"http://25.50.246.152:8080/payloadimage"};
 					
 						const auto response = request.send("POST", body, {
 						{"Content-Type", "application/json"}
@@ -270,13 +271,14 @@ int main()
 				//send
 				try
 				{
-					http::Request request{"http://host.docker.internal:9000/poop"};
+					http::Request request{"http://25.50.246.152:8080/payloadimage"};
 					json j;
 					j["raw"] = sendStr;
 					j["sequencenumber"] = packetNum;
-					std::string timeStamp = "2";
+					std::string timeStamp = "6";
 					j["ID"] = timeStamp;
 					j["finflag"] = true;
+					std::cout << " if caluse sending fin" << std::endl;
 					std::string body = j.dump();
 
 					const auto response = request.send("POST", body, {
