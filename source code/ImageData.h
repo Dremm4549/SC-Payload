@@ -5,7 +5,11 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <cstdlib>
+#include <filesystem>
 #include <iomanip>
+
+using std::filesystem::directory_iterator;
 /**
  * @brief Class to handle image data operations.
  *
@@ -26,6 +30,7 @@ private:
 	std::ifstream imageFile; /// To be changed static file
 	char* imageBuffer; ///< Buffer to store image data in bytes.
 	std::string imageHex; ///< Hex representation of image data.
+
 
 public:
 	/**
@@ -126,4 +131,12 @@ public:
 	 * 
 	*/
 	void CloseImage();
+	/**
+	 * @brief Generates a random image from the payload filesystem
+	 * 
+	 * This function will pick a random image from the file system when it recieves new coordinates
+	 * 
+	 * @return std::string the new image filepath
+	*/
+	std::string GenerateNewImage();
 };

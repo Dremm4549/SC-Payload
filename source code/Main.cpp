@@ -142,7 +142,6 @@ int main()
 				double lat = readVal["lat"].d();
 				std::string time = readVal["Time"].s();
 
-
 				telemetryObj.setTelem((float)longV,(float)lat,(std::string)time);
 			}
 			else
@@ -170,16 +169,19 @@ int main()
 
 		if(payloadObj.GetPowerState())
 		{
-			
-			imageDataObj.OpenImage("../../Images/Jokes.png");
-			imageDataObj.SetImageFileSize();
-			imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
-			jsonResp["size"] = imageDataObj.GetImageFileSize();
+			std::string selectedImage = imageDataObj.GenerateNewImage();
+			std::cout << selectedImage << std::endl;
+			imageDataObj.OpenImage(selectedImage);
+		//	imageDataObj.SetImageFileSize();
+			//imageDataObj.AllocateImageBuffer(imageDataObj.GetImageFileSize());
+			//jsonResp["size"] = imageDataObj.GetImageFileSize();
 			imageDataObj.StoreImageInMemmory();
+			imageDataObj.CloseImage();
 
 			if(packetObj.FindService(5))
 			{
 				std::string serviceIp = packetObj.GetServiceIP(1);
+				std::string sourceAddress = packetObj.GetServiceIP(2);
 				std::cout << "can send request to " << serviceIp << std::endl;
 			}
 			else{
@@ -195,16 +197,19 @@ int main()
 			imageDataObj.CloseImage();
 
 			//calculate the number of packets that need to send
-			float packetToBeSent = (float)imageDataObj.GetImageFileSize() / (float)MAXBUFFERSIZE;
+			float packetToBeSent = (float)imgHex.size() / (float)MAXBUFFERSIZE;
 			int packetRemainder = imageDataObj.GetImageFileSize() % MAXBUFFERSIZE;
+			std::cout << "The buffer has: " << imageDataObj.GetImageFileSize() << std::endl << " This many characters in string " << imgHex.size() << std::endl;
+			std::cout << "The packets to be sent has: " << packetToBeSent << " and this many remaning bytes remaning" << packetRemainder<< std:: endl;
 
-			if(packetRemainder > 0){
-				packetToBeSent += 1;
-			}		
+			// if(packetRemainder > 0){
+			// 	packetToBeSent += 1;
+			// }		
 
 			std:string respStr = "";
 			std::string sendStr = "";
-
+			std::string payloadOpIp = packetObj.GetServiceIP(7) + "/payloadimage";
+			std:: cout << payloadOpIp;
 			while(imgHex[i] != '\0')
 			{
 				sendStr += imgHex[i];
@@ -216,12 +221,17 @@ int main()
 					{
 						json j;
 						j["raw"] = sendStr;
+						j["verb"] = "POST";
+						j["source"] = "2";
+						j["URI"] = payloadOpIp;
 						j["sequencenumber"] = packetNum;
-						std::string timeStamp = "2";
+						std::string timeStamp = "6";
 						j["ID"] = timeStamp;
+						
 						if(packetNum == packetToBeSent)
 						{
 							j["finflag"] = true;
+							std::cout << "sending fin" << std::endl;
 						}
 						else
 						{
@@ -229,6 +239,7 @@ int main()
 						}
 
 						std::string body = j.dump();
+						
 						http::Request request{"http://host.docker.internal:9000/poop"};
 					
 						const auto response = request.send("POST", body, {
@@ -236,6 +247,7 @@ int main()
 						});
 					
 						byteCounter = 0;
+						sendStr.clear();
 						std::cout << std::string{response.body.begin(), response.body.end()} << '\n';
 						
 					}
@@ -245,12 +257,20 @@ int main()
 					}
 					
 					sendStr.clear();
+					std::cout << packetNum << "out of " << packetToBeSent << std::endl;
 					packetNum++;
 				}
 
 				i++;
 				byteCounter++;
 			}
+
+			// if(byteCounter > 0 && packetRemainder > 0)
+			// {
+			// 	std::cout << " current str size " << imgHex.size() << std::endl;
+			// 	std::cout << "Okay start from" << i << " Go till " << imgHex.size() << " current str: "<< sendStr << std::endl;
+				
+			// }
 
 			if (byteCounter > 0 && packetRemainder > 0) 
 			{
@@ -261,9 +281,10 @@ int main()
 					json j;
 					j["raw"] = sendStr;
 					j["sequencenumber"] = packetNum;
-					std::string timeStamp = "2";
+					std::string timeStamp = "6";
 					j["ID"] = timeStamp;
 					j["finflag"] = true;
+					std::cout << " if caluse sending fin" << std::endl;
 					std::string body = j.dump();
 
 					const auto response = request.send("POST", body, {
@@ -279,6 +300,7 @@ int main()
 
 				sendStr.clear();
 				packetNum++;
+				std::cout << packetNum << "out of " << packetToBeSent << std::endl;
 				byteCounter = 0;
 			}
 			
