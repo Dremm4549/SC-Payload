@@ -181,6 +181,7 @@ int main()
 			if(packetObj.FindService(5))
 			{
 				std::string serviceIp = packetObj.GetServiceIP(1);
+				std::string sourceAddress = packetObj.GetServiceIP(2);
 				std::cout << "can send request to " << serviceIp << std::endl;
 			}
 			else{
@@ -200,13 +201,15 @@ int main()
 			int packetRemainder = imageDataObj.GetImageFileSize() % MAXBUFFERSIZE;
 			std::cout << "The buffer has: " << imageDataObj.GetImageFileSize() << std::endl << " This many characters in string " << imgHex.size() << std::endl;
 			std::cout << "The packets to be sent has: " << packetToBeSent << " and this many remaning bytes remaning" << packetRemainder<< std:: endl;
+
 			// if(packetRemainder > 0){
 			// 	packetToBeSent += 1;
 			// }		
 
 			std:string respStr = "";
 			std::string sendStr = "";
-
+			std::string payloadOpIp = packetObj.GetServiceIP(7) + "/payloadimage";
+			std:: cout << payloadOpIp;
 			while(imgHex[i] != '\0')
 			{
 				sendStr += imgHex[i];
@@ -218,6 +221,9 @@ int main()
 					{
 						json j;
 						j["raw"] = sendStr;
+						j["verb"] = "POST";
+						j["source"] = "2";
+						j["URI"] = payloadOpIp;
 						j["sequencenumber"] = packetNum;
 						std::string timeStamp = "6";
 						j["ID"] = timeStamp;
@@ -234,7 +240,7 @@ int main()
 
 						std::string body = j.dump();
 						
-						http::Request request{"http://25.50.246.152:8080/payloadimage"};
+						http::Request request{"http://host.docker.internal:9000/poop"};
 					
 						const auto response = request.send("POST", body, {
 						{"Content-Type", "application/json"}
@@ -271,7 +277,7 @@ int main()
 				//send
 				try
 				{
-					http::Request request{"http://25.50.246.152:8080/payloadimage"};
+					http::Request request{"http://host.docker.internal:9000/poop"};
 					json j;
 					j["raw"] = sendStr;
 					j["sequencenumber"] = packetNum;
