@@ -5,18 +5,18 @@
 #include "../source code/Telem.h"
 
 TEST(TelemTest, ConstructorSetLat) {
-    Telem telem(1, 2, 3);
+    Telem telem(1, 2, "3");
     ASSERT_EQ(telem.getLat(), 2);
 }
 
 TEST(TelemTest, ConstructorSetLong) {
-    Telem telem(1, 2, 3);
+    Telem telem(1, 2, "3");
     ASSERT_EQ(telem.getLong(), 1);
 }
 
 TEST(TelemTest, ConstructorSetTime) {
-    Telem telem(1, 2, 3);
-    ASSERT_EQ(telem.getTime(), 3);
+    Telem telem(1, 2, "3");
+    ASSERT_EQ(telem.getTime(), "3");
 }
 
 TEST(TelemTest, TelemetrySetLat) {
@@ -33,9 +33,9 @@ TEST(TelemTest, TelemetrySetLong) {
 
 TEST(TelemTest, TelemetrySetTime) {
     Telem telem;
-    auto time = std::chrono::system_clock::now();
-    telem.setTime(std::chrono::system_clock::to_time_t(time));
-    ASSERT_EQ(telem.getTime(), std::chrono::system_clock::to_time_t(time));
+    std::string time = "123";
+    telem.setTime(time);
+    ASSERT_EQ(telem.getTime(), "123");
 }
 
 TEST(PayloadTest, ConstructorPayloadStateTrue) {

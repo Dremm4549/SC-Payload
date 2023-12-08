@@ -52,14 +52,17 @@ int main()
 		if (state) {
 			if (strcmp(state, "true") == 0) {
 				payloadObj.SetPowerState(true);
+				jsonResp["Status"] = "True";
 				res.code = 200;
 			}
 			else if(strcmp(state, "false") == 0){
 				payloadObj.SetPowerState(false);
+				jsonResp["Status"] = "False";
 				res.code = 200;
 			}
 			else
 			{
+				jsonResp["Status"] = "Error";
 				res.code = 400;
 			}
 		}
@@ -134,22 +137,26 @@ int main()
 		crow::json::rvalue readVal;
 
 		readVal = crow::json::load(req.body);
+			if(!payloadObj.GetPowerState()){
+				if(readVal){
+				if(readVal.has("long") && readVal.has("lat") && readVal.has("Time")&& payloadObj.GetPowerState() == true){
+					res.code = 200;
+					double longV = readVal["long"].d();
+					double lat = readVal["lat"].d();
+					std::string time = readVal["Time"].s();
 
-		if(readVal){
-			if(readVal.has("long") && readVal.has("lat") && readVal.has("Time")&& payloadObj.GetPowerState() == true){
-				res.code = 200;
-				double longV = readVal["long"].d();
-				double lat = readVal["lat"].d();
-				std::string time = readVal["Time"].s();
+					telemetryObj.setTelem((float)longV,(float)lat,(std::string)time);
+				}
+				else
+				{
+					res.code = 400;
 
-				telemetryObj.setTelem((float)longV,(float)lat,(std::string)time);
+				}
 			}
-			else
-			{
-				res.code = 400;
-
-			}
+		} else {
+			res.code = 503;
 		}
+		
 
 		res.set_header("Content-Type", "application/json");
 		res.write(jsonResp.dump());
@@ -240,7 +247,7 @@ int main()
 
 						std::string body = j.dump();
 						
-						http::Request request{"http://host.docker.internal:9000/poop"};
+						http::Request request{"http://" + packetObj.GetServiceIP(2) + ":8080/downloadImage"};
 					
 						const auto response = request.send("POST", body, {
 						{"Content-Type", "application/json"}
@@ -277,7 +284,7 @@ int main()
 				//send
 				try
 				{
-					http::Request request{"http://host.docker.internal:9000/poop"};
+					http::Request request{"http://" + packetObj.GetServiceIP(2) + ":8080/downloadImage"};
 					json j;
 					j["raw"] = sendStr;
 					j["sequencenumber"] = packetNum;
