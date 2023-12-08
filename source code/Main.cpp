@@ -167,6 +167,20 @@ int main()
 	([&imageDataObj, &payloadObj, &packetObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
 
+		readVal = crow::json::load(req.body);
+		std::string imgTimeStamp;
+		if(readVal)
+		{
+			if(readVal.has("ID"))
+			{
+				 timeStamp = readVal["ID"].s();
+			}
+			else
+			{
+				res.code = 405;
+			}
+		}
+		
 		if(payloadObj.GetPowerState())
 		{
 			std::string selectedImage = imageDataObj.GenerateNewImage();
@@ -225,8 +239,8 @@ int main()
 						j["source"] = "2";
 						j["URI"] = payloadOpIp;
 						j["sequencenumber"] = packetNum;
-						std::string timeStamp = "6";
-						j["ID"] = timeStamp;
+						//std::string timeStamp = "6";
+						j["ID"] = imgTimeStamp;
 						
 						if(packetNum == packetToBeSent)
 						{
@@ -281,8 +295,8 @@ int main()
 					json j;
 					j["raw"] = sendStr;
 					j["sequencenumber"] = packetNum;
-					std::string timeStamp = "6";
-					j["ID"] = timeStamp;
+					//std::string timeStamp = "6";
+					j["ID"] = imgTimeStamp;
 					j["finflag"] = true;
 					std::cout << " if caluse sending fin" << std::endl;
 					std::string body = j.dump();
