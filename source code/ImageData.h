@@ -66,7 +66,18 @@ public:
 	 * @return std::string The hexidecimal binary data.
 	 */
 	std::string ConvertBinaryToHex(const char* buffer, size_t size, bool upper_case);
-
+	/**
+	 * @brief Converts a hexadecimal string to binary data and writes it to a file.
+	 *
+	 * This function takes a hexadecimal string and converts each pair of hexadecimal
+	 * characters into a byte of binary data.
+	 * The binary data is then written to output file. If the file cannot be opened, 
+	 * the function reports an error and returns false.
+	 *
+	 * @param hexStr The hexadecimal string to be converted.
+	 * @param outputPath The path of the output file where the binary data will be written.
+	 * @return Returns true if the conversion and writing process is successful, false otherwise.
+	 */
 	bool ConvertHexToBinaryAndWriteToFile(const std::string& hexStr, const std::string& outputPath);
 
 	/**
