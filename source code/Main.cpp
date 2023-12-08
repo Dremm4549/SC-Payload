@@ -166,14 +166,15 @@ int main()
 	.methods("GET"_method)
 	([&imageDataObj, &payloadObj, &packetObj](const crow::request& req, crow::response& res) {
 		crow::json::wvalue jsonResp;
-
+		
+		crow::json::rvalue readVal;
 		readVal = crow::json::load(req.body);
 		std::string imgTimeStamp;
 		if(readVal)
 		{
 			if(readVal.has("ID"))
 			{
-				 timeStamp = readVal["ID"].s();
+				 imgTimeStamp = readVal["ID"].s();
 			}
 			else
 			{
