@@ -168,6 +168,7 @@ int main()
 		crow::json::wvalue jsonResp;
 		
 		crow::json::rvalue readVal;
+		// read the body of the json looking for ID
 		readVal = crow::json::load(req.body);
 		std::string imgTimeStamp;
 		if(readVal)
